@@ -1,11 +1,23 @@
 {
     "name": "paliari/php-date-time",
-    "version": "0.1.0",
     "description": "Tratamento de Data e Hora para PHP",
-    "license": "proprietary",
+    "keywords": ["php", "date", "datetime"],
+    "homepage": "https://github.com/paliari/php-date-time",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Marcos Paliari",
+            "email": "marcos@paliari.com.br",
+            "homepage": "http://paliari.com.br"
+        }
+    ],
     "autoload": {
         "psr-0": {
-         "Paliari\\DateTime\\": "src"
+            "Paliari\\DateTime\\": "src"
         }
+    },
+    "require": {
+        "nesbot/Carbon": "1.4.*"
     }
 }
