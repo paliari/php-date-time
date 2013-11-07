@@ -1,0 +1,11 @@
+{
+    "name": "paliari/php-date-time",
+    "version": "0.1.0",
+    "description": "Tratamento de Data e Hora para PHP",
+    "license": "proprietary",
+    "autoload": {
+        "psr-0": {
+         "Paliari\\DateTime\\": "src"
+        }
+    }
+}
