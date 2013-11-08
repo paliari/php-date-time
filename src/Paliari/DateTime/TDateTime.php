@@ -46,13 +46,15 @@ class TDateTime extends Carbon
 
     /**
      * Retorna a data em string no formato universal
+     *
      * @param $format
      *
      * @return string
      */
     public function toString($format)
     {
-        return ($this->hour || $this->minute || $this->second) ? $this->toDateTimeString($format) : $this->toDateString();
+        return $this->format($format);
+       // return ($this->hour || $this->minute || $this->second) ? $this->toDateTimeString($format) : $this->toDateString();
     }
 
     /**
@@ -91,13 +93,11 @@ class TDateTime extends Carbon
      * Converte uma TDate para string formatada de acordo com o parametro passado.
      * Defaut: Y-m-d H:i:s
      *
-     * @param  string $format
-     *
      * @return string
      */
-    public function dateTimeToString($format = 'Y-m-d H:i:s')
+    public function dateTimeToString()
     {
-        return static::toDateTimeString($format);
+        return static::toDateTimeString();
     }
 
     /**
