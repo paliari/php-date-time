@@ -4,23 +4,26 @@ namespace Paliari\DateTime;
 
 use Carbon\Carbon,
     Exception,
-    DomainException;
+    DomainException,
+    DateTime;
 
 class TDateTime extends Carbon
 {
     /**
      * Se o time for string ele aceita o formato TDateTime (d/m/Y H:i:s |d/m/YTH:i:s), não aceita formato americano (m/d/Y H:i:s)
      *
-     * @param string|int          $time
+     * @param string|int|DateTime $time
      * @param DateTimeZone|string $tz
      */
     public function __construct($time = null, $tz = null)
     {
-        if (is_numeric($time)) {
+        if ($time instanceof DateTime) {
+            $time = date('Y-m-d H:i:s', $time->getTimestamp());
+        } elseif (is_numeric($time)) {
             $time = date('Y-m-d H:i:s', $time);
         }
 
-        return parent::__construct($time, $tz);
+        parent::__construct($time, $tz);
     }
 
     /**

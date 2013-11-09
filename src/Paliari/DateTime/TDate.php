@@ -16,10 +16,7 @@ class TDate extends TDateTime
      */
     public function __construct($date = null, $tz = null)
     {
-        if (is_numeric($date)) {
-            $date = date('Y-m-d', $date);
-        }
-
-        return parent::__construct($date, $tz);
+        parent::__construct($date, $tz);
+        $this->hour = $this->minute = $this->second = 0;
     }
 }
