@@ -7,6 +7,10 @@ use Carbon\Carbon,
     DomainException,
     DateTime;
 
+/**
+ * Class TDateTime
+ * @package Paliari\DateTime
+ */
 class TDateTime extends Carbon
 {
     /**
@@ -24,6 +28,11 @@ class TDateTime extends Carbon
         }
 
         parent::__construct($time, $tz);
+        $this->init();
+    }
+
+    protected function init()
+    {
     }
 
     /**
@@ -57,7 +66,7 @@ class TDateTime extends Carbon
     public function toString($format)
     {
         return $this->format($format);
-       // return ($this->hour || $this->minute || $this->second) ? $this->toDateTimeString($format) : $this->toDateString();
+        // return ($this->hour || $this->minute || $this->second) ? $this->toDateTimeString($format) : $this->toDateString();
     }
 
     /**
@@ -119,7 +128,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setDay($value)
     {
@@ -131,7 +140,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setMonth($value)
     {
@@ -143,7 +152,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setYear($value)
     {
@@ -155,7 +164,7 @@ class TDateTime extends Carbon
      *
      * @param  Integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setHour($value)
     {
@@ -167,7 +176,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setMinute($value)
     {
@@ -179,7 +188,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setSecond($value)
     {
@@ -187,7 +196,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna o ano de uma TDate
+     * Retorna o ano de uma TDateTime
      * @return int
      */
     public function getYear()
@@ -196,7 +205,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna os meses de uma TDate
+     * Retorna os meses de uma TDateTime
      * @return string
      */
     public function getMonth()
@@ -205,7 +214,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna os dias de uma TDate
+     * Retorna os dias de uma TDateTime
      * @return string
      */
     public function getDay()
@@ -214,7 +223,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna as horas de uma TDate
+     * Retorna as horas de uma TDateTime
      * @return string
      */
     public function getHour()
@@ -223,7 +232,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna os minutos de uma TDate
+     * Retorna os minutos de uma TDateTime
      * @return string
      */
     public function getMinute()
@@ -232,7 +241,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna os segundos de uma TDate
+     * Retorna os segundos de uma TDateTime
      * @return string
      */
     public function getSecond()

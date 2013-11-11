@@ -4,19 +4,15 @@ namespace Paliari\DateTime;
 
 /**
  * Class TDate
- * @package Sinergia\Brasil\TDateTime
+ * @package Paliari\DateTime
  */
 class TDate extends TDateTime
 {
     /**
-     * Se o time for string ele aceita o formato TDate (d/m/Y), não aceita formato americano (m/d/Y)
-     *
-     * @param string|int          $date
-     * @param DateTimeZone|string $tz
+     * Seta zero para hora, minuto e segundo.
      */
-    public function __construct($date = null, $tz = null)
+    protected function init()
     {
-        parent::__construct($date, $tz);
-        $this->hour = $this->minute = $this->second = 0;
+        $this->setHour(0)->setMinute(0)->setSecond(0);
     }
 }
