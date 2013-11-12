@@ -7,6 +7,10 @@ use Carbon\Carbon,
     DomainException,
     DateTime;
 
+/**
+ * Class TDateTime
+ * @package Paliari\DateTime
+ */
 class TDateTime extends Carbon
 {
     /**
@@ -24,6 +28,11 @@ class TDateTime extends Carbon
         }
 
         parent::__construct($time, $tz);
+        $this->init();
+    }
+
+    protected function init()
+    {
     }
 
     /**
@@ -57,39 +66,6 @@ class TDateTime extends Carbon
     public function toString($format)
     {
         return $this->format($format);
-       // return ($this->hour || $this->minute || $this->second) ? $this->toDateTimeString($format) : $this->toDateString();
-    }
-
-    /**
-     * Converte um timestamp para determinado valor para formato do XML padrao ABRASF
-     *
-     * @param timestamp $value
-     *
-     * @return string
-     */
-    public static function dateTimeToXMLValue($value)
-    {
-        if (!$value) {
-            return null;
-        }
-
-        return date('Y-m-d\TH:i:s', $value);
-    }
-
-    /**
-     * Converte uma timestamp para determinado valor para formato do XML padrao ABRASF
-     *
-     * @param timestamp $date
-     *
-     * @return string
-     */
-    public static function dateToXMLValue($date)
-    {
-        if (!$date) {
-            return null;
-        }
-
-        return date('Y-m-d', $date);
     }
 
     /**
@@ -119,7 +95,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setDay($value)
     {
@@ -131,7 +107,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setMonth($value)
     {
@@ -143,7 +119,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setYear($value)
     {
@@ -155,7 +131,7 @@ class TDateTime extends Carbon
      *
      * @param  Integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setHour($value)
     {
@@ -167,7 +143,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setMinute($value)
     {
@@ -179,7 +155,7 @@ class TDateTime extends Carbon
      *
      * @param  integer $value
      *
-     * @return Carbon  TDate
+     * @return TDateTime
      */
     public function setSecond($value)
     {
@@ -187,7 +163,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna o ano de uma TDate
+     * Retorna o ano de uma TDateTime
      * @return int
      */
     public function getYear()
@@ -196,7 +172,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna os meses de uma TDate
+     * Retorna os meses de uma TDateTime
      * @return string
      */
     public function getMonth()
@@ -205,7 +181,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna os dias de uma TDate
+     * Retorna os dias de uma TDateTime
      * @return string
      */
     public function getDay()
@@ -214,7 +190,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna as horas de uma TDate
+     * Retorna as horas de uma TDateTime
      * @return string
      */
     public function getHour()
@@ -223,7 +199,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna os minutos de uma TDate
+     * Retorna os minutos de uma TDateTime
      * @return string
      */
     public function getMinute()
@@ -232,7 +208,7 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna os segundos de uma TDate
+     * Retorna os segundos de uma TDateTime
      * @return string
      */
     public function getSecond()
@@ -245,19 +221,17 @@ class TDateTime extends Carbon
      * Se a segunda data não for passada retorna a diferença entre
      *  a data atual e a data passada.
      *
-     * @param  TDateTime $datini
      * @param  TDateTime $datfim
      *
      * @return int    (Quantidade de dias entre as duas datas)
      */
-    public static function intervalDays(TDateTime $datini, TDateTime $datfim = null)
+    public function intervalDays($datfim = null)
     {
-        $datini = new TDateTime($datini->toDateString());
-        $datfim = new TDateTime($datfim ? $datfim->toDateString() : date('Y-m-d'));
-
+        $datini   = new TDateTime($this->toDateString());
+        $datfim   = new TDateTime($datfim ? $datfim->toDateString() : date('Y-m-d'));
         $interval = $datini->diff($datfim);
 
-        return $interval->format('%a');
+        return $interval->format('%r%a');
     }
 
     /**
@@ -271,14 +245,12 @@ class TDateTime extends Carbon
      *
      * @return int
      */
-    public function compareDate($date)
+    public function compareDate($date = null)
     {
         $datini   = new TDateTime($this->toDateString());
         $datfim   = new TDateTime($date ? $date->toDateString() : date('Y-m-d'));
         $interval = $datini->diff($datfim);
-        $operacao = $interval->format('%R');
-        $numero   = $interval->format('%a');
 
-        return '0' === $numero ? 0 : ('+' === $operacao ? 1 : -1);
+        return (int)($interval->format('%r') . (bool)$interval->format('%a'));
     }
 }

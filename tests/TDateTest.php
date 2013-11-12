@@ -11,16 +11,16 @@ class TDateTest extends PHPUnit_Framework_TestCase
     public function testContructDataUniversal()
     {
         $stop = date('Y', time()) + 5;
-        $ano = date('Y', time()) - 10;
-        $mes = 1;
-        $dia = 0;
+        $ano  = date('Y', time()) - 10;
+        $mes  = 1;
+        $dia  = 0;
 
         while ($ano <= $stop) {
             $timestamp = mktime(0, 0, 0, $mes, $dia + 1, $ano);
-            $dia = date('d', $timestamp);
-            $mes = date('m', $timestamp);
-            $ano = date('Y', $timestamp);
-            $date_br = new TDate("$ano-$mes-$dia");
+            $dia       = date('d', $timestamp);
+            $mes       = date('m', $timestamp);
+            $ano       = date('Y', $timestamp);
+            $date_br   = new TDate("$ano-$mes-$dia");
             $this->assertEquals($timestamp, $date_br->timestamp);
         }
     }
@@ -33,20 +33,20 @@ class TDateTest extends PHPUnit_Framework_TestCase
     {
         $Y = date('Y', time());
         $m = date('m', time());;
-        $d = 0;
-        $H = 0;
-        $i = 0;
-        $s = 0;
+        $d   = 0;
+        $H   = 0;
+        $i   = 0;
+        $s   = 0;
         $stp = $d + 30;
 
         while ($d < $stp) {
             $tmstp = mktime($H, $i, $s, $m, $d + 1, $Y);
-            $d = date('d', $tmstp);
-            $m = date('m', $tmstp);
-            $Y = date('Y', $tmstp);
-            $H = date('H', $tmstp);
-            $i = date('i', $tmstp);
-            $s = date('s', $tmstp);
+            $d     = date('d', $tmstp);
+            $m     = date('m', $tmstp);
+            $Y     = date('Y', $tmstp);
+            $H     = date('H', $tmstp);
+            $i     = date('i', $tmstp);
+            $s     = date('s', $tmstp);
 
             $tDate = new TDate((int)$tmstp);
             $this->assertEquals($tmstp, $tDate->timestamp);
@@ -60,8 +60,11 @@ class TDateTest extends PHPUnit_Framework_TestCase
      */
     public function testIntervaloDias()
     {
-        $this->assertEquals(30, TDate::intervalDays(new TDate('2013-10-01'), new TDate('2013-10-31')));
-        $this->assertEquals(7, TDate::intervalDays(new TDate('2013-09-01'), new TDate('2013-08-25')));
-        $this->assertEquals(30, TDate::intervalDays(new TDate('2013-11-01'), new TDate('2013-12-1')));
+        $date = new TDate('2013-10-01');
+        $this->assertEquals(30, $date->intervalDays(new TDate('2013-10-31')));
+        $date = new TDate('2013-09-01');
+        $this->assertEquals(-7, $date->intervalDays(new TDate('2013-08-25')));
+        $date = new TDate('2013-11-01');
+        $this->assertEquals(30, $date->intervalDays(new TDate('2013-12-1')));
     }
 }
