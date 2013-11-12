@@ -104,7 +104,7 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
     public function testCreateDate()
     {
         $this->assertEquals(Date('Y-m-d H:i:s', time()), TDateTime::createDate('now'));
-        $this->assertEquals('2013-11-07 00:00:00', TDateTime::createDate('2013-11-07')->dateTimeToString());
+        $this->assertEquals('2013-11-07 00:00:00', TDateTime::createDate('2013-11-07')->toDateTimeString());
         $data = new TDateTime('2013-09-09');
         $this->assertEquals('2013-09-09', TDateTime::createDate($data)->toDateString());
         $this->assertEquals($data, new TDateTime($data));

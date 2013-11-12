@@ -69,14 +69,29 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Converte uma TDate para string formatada de acordo com o parametro passado.
+     * Converte uma data para string formatada de acordo com o parametro passado.
      * Defaut: Y-m-d H:i:s
+     *
+     * @param string $format
      *
      * @return string
      */
-    public function dateTimeToString()
+    public function toDateTimeString($format = 'Y-m-d H:i:s')
     {
-        return static::toDateTimeString();
+        return $this->format($format);
+    }
+
+    /**
+     * Converte uma data para string formatada de acordo com o parametro passado.
+     * Defaut: Y-m-d
+     *
+     * @param string $format
+     *
+     * @return string
+     */
+    public function toDateString($format = 'Y-m-d')
+    {
+        return $this->format($format);
     }
 
     /**
