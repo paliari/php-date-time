@@ -221,19 +221,17 @@ class TDateTime extends Carbon
      * Se a segunda data não for passada retorna a diferença entre
      *  a data atual e a data passada.
      *
-     * @param  TDateTime $datini
      * @param  TDateTime $datfim
      *
      * @return int    (Quantidade de dias entre as duas datas)
      */
-    public static function intervalDays($datini, $datfim = null)
+    public function intervalDays($datfim = null)
     {
-        $datini = new TDateTime($datini->toDateString());
-        $datfim = new TDateTime($datfim ? $datfim->toDateString() : date('Y-m-d'));
-
+        $datini   = new TDateTime($this->toDateString());
+        $datfim   = new TDateTime($datfim ? $datfim->toDateString() : date('Y-m-d'));
         $interval = $datini->diff($datfim);
 
-        return (int)$interval->format('%R%a');
+        return $interval->format('%r%a');
     }
 
     /**
@@ -247,14 +245,12 @@ class TDateTime extends Carbon
      *
      * @return int
      */
-    public function compareDate($date)
+    public function compareDate($date = null)
     {
         $datini   = new TDateTime($this->toDateString());
         $datfim   = new TDateTime($date ? $date->toDateString() : date('Y-m-d'));
         $interval = $datini->diff($datfim);
-        $operacao = $interval->format('%R');
-        $numero   = $interval->format('%a');
 
-        return '0' === $numero ? 0 : ('+' === $operacao ? 1 : -1);
+        return (int)($interval->format('%r') . (bool)$interval->format('%a'));
     }
 }
