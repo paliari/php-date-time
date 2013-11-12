@@ -66,39 +66,6 @@ class TDateTime extends Carbon
     public function toString($format)
     {
         return $this->format($format);
-        // return ($this->hour || $this->minute || $this->second) ? $this->toDateTimeString($format) : $this->toDateString();
-    }
-
-    /**
-     * Converte um timestamp para determinado valor para formato do XML padrao ABRASF
-     *
-     * @param timestamp $value
-     *
-     * @return string
-     */
-    public static function dateTimeToXMLValue($value)
-    {
-        if (!$value) {
-            return null;
-        }
-
-        return date('Y-m-d\TH:i:s', $value);
-    }
-
-    /**
-     * Converte uma timestamp para determinado valor para formato do XML padrao ABRASF
-     *
-     * @param timestamp $date
-     *
-     * @return string
-     */
-    public static function dateToXMLValue($date)
-    {
-        if (!$date) {
-            return null;
-        }
-
-        return date('Y-m-d', $date);
     }
 
     /**
@@ -259,14 +226,14 @@ class TDateTime extends Carbon
      *
      * @return int    (Quantidade de dias entre as duas datas)
      */
-    public static function intervalDays(TDateTime $datini, TDateTime $datfim = null)
+    public static function intervalDays($datini, $datfim = null)
     {
         $datini = new TDateTime($datini->toDateString());
         $datfim = new TDateTime($datfim ? $datfim->toDateString() : date('Y-m-d'));
 
         $interval = $datini->diff($datfim);
 
-        return $interval->format('%a');
+        return (int)$interval->format('%R%a');
     }
 
     /**
