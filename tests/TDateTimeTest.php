@@ -5,6 +5,16 @@ use Paliari\DateTime\TDateTime;
 class TDateTimeTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var TDateTime
+     */
+    public $date;
+
+    public function __construct()
+    {
+        $this->date = new TDateTime('2013-05-01');
+    }
+
+    /**
      * @group slow
      * Testa um intervalo de 15 anos se todos dias estão sendo gerados corretamente pelo DateBr
      */
@@ -60,8 +70,9 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testIntervaloDias()
     {
+
         $this->assertEquals(30, TDateTime::intervalDays(new TDateTime('2013-10-01'), new TDateTime('2013-10-31')));
-        $this->assertEquals(7, TDateTime::intervalDays(new TDateTime('2013-09-01'), new TDateTime('2013-08-25')));
+        $this->assertEquals(-7, TDateTime::intervalDays(new TDateTime('2013-09-01'), new TDateTime('2013-08-25')));
         $this->assertEquals(30, TDateTime::intervalDays(new TDateTime('2013-11-01'), new TDateTime('2013-12-1')));
     }
 
@@ -101,5 +112,65 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
     public function testException()
     {
         TDateTime::createDate('nogsgsw');
+    }
+
+    public function testAddYear()
+    {
+        $this->assertEquals('2015-05-01', $this->date->addYears(2)->toDateString());
+    }
+
+    public function testSubYear()
+    {
+        $this->assertEquals('2011-05-01', $this->date->subYears(2)->toDateString());
+    }
+
+    public function testAddMonths()
+    {
+        $this->assertEquals('2013-07-01', $this->date->addMonths(2)->toDateString());
+    }
+
+    public function testSubMonth()
+    {
+        $this->assertEquals('2013-03-01', $this->date->subMonths(2)->toDateString());
+    }
+
+    public function testAddDays()
+    {
+        $this->assertEquals('2013-05-03', $this->date->addDays(2)->toDateString());
+    }
+
+    public function testSubDays()
+    {
+        $this->assertEquals('2013-04-29',$this->date->subDays(2)->toDateString());
+    }
+
+    public function testAddHour()
+    {
+        $this->assertEquals('2013-05-01 02:00:00', $this->date->addHours(2)->toDateTimeString());
+}
+
+    public function testSubHour()
+    {
+        $this->assertEquals('2013-04-30 22:00:00', $this->date->subHours(2)->toDateTimeString());
+    }
+
+    public function testAddMinute()
+    {
+        $this->assertEquals('2013-05-01 00:02:00', $this->date->addMinutes(2)->toDateTimeString());
+    }
+
+    public function testSubMinute()
+    {
+        $this->assertEquals('2013-04-30 23:58:00', $this->date->subMinutes(2)->toDateTimeString());
+    }
+
+    public function testAddSecond()
+    {
+        $this->assertEquals('2013-05-01 00:00:02', $this->date->addSeconds(2)->toDateTimeString());
+    }
+
+    public function testSubSecond()
+    {
+        $this->assertEquals('2013-04-30 23:59:58', $this->date->subSeconds(2)->toDateTimeString());
     }
 }
