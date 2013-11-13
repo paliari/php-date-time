@@ -270,8 +270,10 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Verifica se o valor passado é um valor válido para data
+     * Verifica se o valor passado é um valor válido para uma data
+     *
      * @param mixed $date
+     *
      * @return bool
      */
     public static function isDate($date)
@@ -283,7 +285,8 @@ class TDateTime extends Carbon
             return false;
         }
         try {
-           echo new static($date);
+            new static($date);
+
             return true;
         } catch (Exception $e) {
             return false;
