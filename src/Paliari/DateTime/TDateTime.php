@@ -419,7 +419,7 @@ class TDateTime extends Carbon
     {
         $datini   = new TDateTime($this->toDateString());
         $datfim   = new TDateTime($date ? $date->toDateString() : date('Y-m-d'));
-        $interval = $datini->diff($datfim);
+        $interval = $datfim->diff($datini);
 
         return (int)($interval->format('%r') . (bool)$interval->format('%a'));
     }
