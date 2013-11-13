@@ -421,6 +421,7 @@ class TDateTime extends Carbon
      *  -1 quando a data passada for menor
      *
      * @param $date
+     *
      * @deprecated Utilizar $date->compareDate($outraData);
      * @return int
      */
