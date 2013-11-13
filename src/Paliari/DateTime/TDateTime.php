@@ -268,4 +268,25 @@ class TDateTime extends Carbon
 
         return (int)($interval->format('%r') . (bool)$interval->format('%a'));
     }
+
+    /**
+     * Verifica se o valor passado é um valor válido para data
+     * @param mixed $date
+     * @return bool
+     */
+    public static function isDate($date)
+    {
+        if (!$date) {
+            return false;
+        }
+        if (is_string($date) && strlen($date) < 9) {
+            return false;
+        }
+        try {
+           echo new static($date);
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
