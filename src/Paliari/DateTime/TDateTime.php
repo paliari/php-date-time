@@ -106,6 +106,17 @@ class TDateTime extends Carbon
     }
 
     /**
+     * Retorna o dia do ano de:
+     *  1 a 365 para anos normais
+     *  1 a 366 para anos bissextos
+     * @return int
+     */
+    public function getDayOfYear()
+    {
+        return (int)$this->format('z');
+    }
+
+    /**
      * Altera apenas o dia
      *
      * @param  integer $value
