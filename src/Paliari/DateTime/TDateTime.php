@@ -270,6 +270,22 @@ class TDateTime extends Carbon
     }
 
     /**
+     * Retorna se a data passada é maior ou menor que a data instanciada
+     * Retorno:
+     *  1 quando a data passada for maior
+     *  0 quando as datas forem iguais
+     *  -1 quando a data passada for menor
+     *
+     * @param $date
+     * @deprecated Utilizar $date->compareDate($outraData);
+     * @return int
+     */
+    public function compare($date = null)
+    {
+        return $this->compareDate($date);
+    }
+
+    /**
      * Verifica se o valor passado é um valor válido para uma data
      *
      * @param mixed $date
