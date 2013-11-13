@@ -232,6 +232,150 @@ class TDateTime extends Carbon
     }
 
     /**
+     * Retorna o objeto adicionando a quantidade de anos passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function addYear($value = 1)
+    {
+        return $this->addYears($value);
+    }
+
+    /**
+     * Retorna o objeto adicionando a quantidade de meses passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function addMonth($value = 1)
+    {
+        return $this->addMonths($value);
+    }
+
+    /**
+     * Retorna o objeto adicionando a quantidade de dias passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function addDay($value = 1)
+    {
+        return $this->addDays($value);
+    }
+
+    /**
+     * Retorna o objeto adicionando a quantidade de horas passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function addHour($value = 1)
+    {
+        return $this->addHours($value);
+    }
+
+    /**
+     * Retorna o objeto adicionando a quantidade de minutos passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function addMinute($value = 1)
+    {
+        return $this->addMinutes($value);
+    }
+
+    /**
+     * Retorna o objeto adicionando a quantidade de segundos passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function addSecond($value = 1)
+    {
+        return $this->addSeconds($value);
+    }
+
+    /**
+     * Retorna o objeto subtraindo a quantidade de anos passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function subYear($value = 1)
+    {
+        return $this->subYears($value);
+    }
+
+    /**
+     * Retorna o objeto subtraindo a quantidade de meses passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function subMonth($value = 1)
+    {
+        return $this->subMonths($value);
+    }
+
+    /**
+     * Retorna o objeto subtraindo a quantidade de dias passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function subDay($value = 1)
+    {
+        return $this->subDays($value);
+    }
+
+    /**
+     * Retorna o objeto subtraindo a quantidade de horas passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function subHour($value = 1)
+    {
+        return $this->subHours($value);
+    }
+
+    /**
+     * Retorna o objeto subtraindo a quantidade de minutos passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function subMinute($value = 1)
+    {
+        return $this->subMinutes($value);
+    }
+
+    /**
+     * Retorna o objeto subtraindo a quantidade de segundos passado no parâmetro
+     *
+     * @param int $value
+     *
+     * @return TDateTime
+     */
+    public function subSecond($value = 1)
+    {
+        return $this->subSeconds($value);
+    }
+
+    /**
      * Retorna a quantidade de dias entre duas datas.
      * Se a segunda data não for passada retorna a diferença entre
      *  a data atual e a data passada.
@@ -267,6 +411,23 @@ class TDateTime extends Carbon
         $interval = $datini->diff($datfim);
 
         return (int)($interval->format('%r') . (bool)$interval->format('%a'));
+    }
+
+    /**
+     * Retorna se a data passada é maior ou menor que a data instanciada
+     * Retorno:
+     *  1 quando a data passada for maior
+     *  0 quando as datas forem iguais
+     *  -1 quando a data passada for menor
+     *
+     * @param $date
+     *
+     * @deprecated Utilizar $date->compareDate($outraData);
+     * @return int
+     */
+    public function compare($date = null)
+    {
+        return $this->compareDate($date);
     }
 
     /**
