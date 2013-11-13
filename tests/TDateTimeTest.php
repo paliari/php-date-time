@@ -93,9 +93,9 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
     public function testCompareDate()
     {
         $date = new TDateTime('2013-10-01');
-        $this->assertEquals(-1, $date->compareDate(new TDateTime('2013-09-25')));
+        $this->assertEquals(1, $date->compareDate(new TDateTime('2013-09-25')));
         $this->assertEquals(0, $date->compareDate(new TDateTime('2013-10-01')));
-        $this->assertEquals(1, $date->compareDate(new TDateTime('2013-10-25')));
+        $this->assertEquals(-1, $date->compareDate(new TDateTime('2013-10-25')));
     }
 
     /**
