@@ -103,12 +103,21 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateDate()
     {
-        $this->assertEquals(Date('Y-m-d H:i:s', time()), TDateTime::createDate('now'));
+        $this->assertEquals(date('Y-m-d H:i:s', time()), TDateTime::createDate('now'));
         $this->assertEquals('2013-11-07 00:00:00', TDateTime::createDate('2013-11-07')->toDateTimeString());
         $data = new TDateTime('2013-09-09');
         $this->assertEquals('2013-09-09', TDateTime::createDate($data)->toDateString());
         $this->assertEquals($data, new TDateTime($data));
-
+        $date = date(DateTime::RSS);
+        $this->assertEquals( $date, TDateTime::createDate($date)->format(DateTime::RSS));
+        $date = date(DateTime::W3C);
+        $this->assertEquals( $date, TDateTime::createDate($date)->format(DateTime::W3C));
+        $date = date(DateTime::COOKIE);
+        $this->assertEquals( $date, TDateTime::createDate($date)->format(DateTime::COOKIE));
+        $date = date(TDateTime::DATE_TIME_STR);
+        $this->assertEquals( $date, TDateTime::createDate($date)->format(TDateTime::DATE_TIME_STR));
+        $date = date(DateTime::ATOM);
+        $this->assertEquals( $date, TDateTime::createDate($date)->format(DateTime::ATOM));
     }
 
     /**
@@ -127,6 +136,33 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
     public function testException()
     {
         TDateTime::createDate('nogsgsw');
+    }
+
+    /**
+     * Verifica se parametro errado gera excecao
+     * @expectedException DomainException
+     */
+    public function testExceptionNew()
+    {
+        new TDateTime('nogsgsw');
+    }
+
+    /**
+     * Testa se o isDate está validando o argumento corretamente
+     */
+    public function testIsDate()
+    {
+        $this->assertTrue(TDateTime::isDate(time()));
+        $this->assertTrue(TDateTime::isDate('2013-11-15'));
+        $this->assertTrue(TDateTime::isDate(date('Y-m-d')));
+        $this->assertTrue(TDateTime::isDate(date(DateTime::RSS)));
+        $this->assertTrue(TDateTime::isDate(date(DateTime::W3C)));
+        $this->assertTrue(TDateTime::isDate(date(DateTime::COOKIE)));
+        $this->assertTrue(TDateTime::isDate(date(TDateTime::DATE_TIME_STR)));
+        $this->assertTrue(TDateTime::isDate(date(DateTime::ATOM)));
+        $this->assertTrue(TDateTime::isDate('now'));
+        $this->assertTrue(TDateTime::isDate('132'));
+        $this->assertFalse(TDateTime::isDate('abc'));
     }
 
     /**
