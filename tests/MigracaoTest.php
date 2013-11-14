@@ -187,54 +187,6 @@ class MigracaoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->zDate->setSecond(2)->toString('s'), $this->tDate->setSecond(2)->toString('s'));
     }
 
-//    /**
-//     * Verifica se as duas funcoes tem o mesmo resultado
-//     */
-//    public function testGetYear()
-//    {
-//        $this->assertEquals($this->zDate->getYear(), $this->tDate->getYear());
-//    }
-//
-//    /**
-//     * Verifica se as duas funcoes tem o mesmo resultado
-//     */
-//    public function testGetMonth()
-//    {
-//        $this->assertEquals($this->zDate->getMonth(), $this->tDate->getMonth());
-//    }
-//
-//    /**
-//     * Verifica se as duas funcoes tem o mesmo resultado
-//     */
-//    public function testGetDay()
-//    {
-//        $this->assertEquals($this->zDate->getDay(), $this->tDate->getDay());
-//    }
-//
-//    /**
-//     * Verifica se as duas funcoes tem o mesmo resultado
-//     */
-//    public function testGetHour()
-//    {
-//        $this->assertEquals($this->zDate->getHour(), $this->tDate->getHour());
-//    }
-//
-//    /**
-//     * Verifica se as duas funcoes tem o mesmo resultado
-//     */
-//    public function testGetMinute()
-//    {
-//        $this->assertEquals($this->zDate->getMinute(), $this->tDate->getMinute());
-//    }
-//
-//    /**
-//     * Verifica se as duas funcoes tem o mesmo resultado
-//     */
-//    public function testGetSecond()
-//    {
-//        $this->assertEquals($this->zDate->getSecond(), $this->tDate->getSecond());
-//    }
-
     /**
      * Compara se a data de origem é maior ou menor que a data passada
      * Se for menor retorna -1, se for igual retorna 0, se for maior retorna 1
@@ -251,6 +203,9 @@ class MigracaoTest extends PHPUnit_Framework_TestCase
      */
     public function testIsDate()
     {
-
+        $this->assertTrue(Zend_Date::isDate($this->zDate));
+        $this->assertTrue(TDateTime::isDate($this->tDate));
+        $this->assertFalse(TDateTime::isDate('abc'));
+        $this->assertFalse(TDateTime::isDate('abc'));
     }
 }
