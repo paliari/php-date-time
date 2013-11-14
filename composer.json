@@ -19,5 +19,8 @@
     },
     "require": {
         "nesbot/Carbon": "1.4.*"
+    },
+    "require-dev": {
+        "zendframework/zendframework1": "1.12.3"
     }
 }
