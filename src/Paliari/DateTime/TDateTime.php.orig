@@ -423,8 +423,13 @@ class TDateTime extends Carbon
     public function compareDate($date = null)
     {
         $datini   = new TDateTime($this->toDateString());
+<<<<<<< HEAD
+        $datfim   = new TDateTime($date ? $date->toDateString() : date('Y-m-d'));
+        $interval = $datfim->diff($datini);
+=======
         $datfim   = new TDateTime($date ? $date->toDateString() : date(static::DATE_STR));
         $interval = $datini->diff($datfim);
+>>>>>>> 06de7bd39ec6d0a0003a740f79ae1d1ecb8ae575
 
         return (int)($interval->format('%r') . (bool)$interval->format('%a'));
     }
