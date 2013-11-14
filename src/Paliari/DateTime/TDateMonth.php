@@ -18,6 +18,6 @@ class TDateMonth extends TDateTime
      * @return bool|string
      */
     public function __toString(){
-        return date('m/Y', $this->getTimestamp());
+        return $this->format('m/Y');
     }
 }
