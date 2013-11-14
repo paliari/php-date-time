@@ -396,15 +396,15 @@ class TDateTime extends Carbon
      * Se a segunda data não for passada retorna a diferença entre
      *  a data atual e a data passada.
      *
-     * @param  TDateTime $datfim
+     * @param  TDateTime $end
      *
      * @return int    (Quantidade de dias entre as duas datas)
      */
-    public function intervalDays($datfim = null)
+    public function intervalDays($end = null)
     {
-        $datini   = new TDateTime($this->toDateString());
-        $datfim   = new TDateTime($datfim ? $datfim->toDateString() : date(static::DATE_STR));
-        $interval = $datini->diff($datfim);
+        $start   = new TDateTime($this->toDateString());
+        $end     = new TDateTime($end ? $end->toDateString() : date(static::DATE_STR));
+        $interval = $start->diff($end);
 
         return $interval->format('%r%a');
     }
@@ -422,9 +422,9 @@ class TDateTime extends Carbon
      */
     public function compareDate($date = null)
     {
-        $datini   = new TDateTime($this->toDateString());
-        $datfim   = new TDateTime($date ? $date->toDateString() : date(static::DATE_STR));
-        $interval = $datini->diff($datfim);
+        $start   = new TDateTime($this->toDateString());
+        $end   = new TDateTime($date ? $date->toDateString() : date(static::DATE_STR));
+        $interval = $end->diff($start);
 
         return (int)($interval->format('%r') . (bool)$interval->format('%a'));
     }
@@ -476,8 +476,7 @@ class TDateTime extends Carbon
             return static::timeToString($date->getTimestamp());
         } elseif (is_string($date)) {
             try {
-                strtotime($date);
-                return $date;
+                return strtotime($date) > 0 ? $date : null;
             } catch (Exception $e) {
                 return null;
             }
