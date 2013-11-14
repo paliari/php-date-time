@@ -26,11 +26,12 @@ class TDateTime extends Carbon
      */
     public function __construct($time = null, $tz = null)
     {
-        if (null!==$time) {
-            $time = static::prepareDate($time);
-            if (!$time) {
+        if (null !== $time) {
+            $date = static::prepareDate($time);
+            if (!$date) {
                 throw new DomainException("Data $time inválida!");
             }
+            $time = $date;
         }
         parent::__construct($time, $tz);
         $this->init();
@@ -53,12 +54,7 @@ class TDateTime extends Carbon
         if (!$date) {
             return null;
         }
-
-        try {
-            return new static($date);
-        } catch (Exception $e) {
-            throw new DomainException("Data inválida!\n" . $e->getMessage());
-        }
+        return new static($date);
     }
 
     /**
@@ -402,8 +398,8 @@ class TDateTime extends Carbon
      */
     public function intervalDays($end = null)
     {
-        $start   = new TDateTime($this->toDateString());
-        $end     = new TDateTime($end ? $end->toDateString() : date(static::DATE_STR));
+        $start = new TDateTime($this->toDateString());
+        $end = new TDateTime($end ? $end->toDateString() : date(static::DATE_STR));
         $interval = $start->diff($end);
 
         return $interval->format('%r%a');
@@ -422,8 +418,8 @@ class TDateTime extends Carbon
      */
     public function compareDate($date = null)
     {
-        $start   = new TDateTime($this->toDateString());
-        $end   = new TDateTime($date ? $date->toDateString() : date(static::DATE_STR));
+        $start = new TDateTime($this->toDateString());
+        $end = new TDateTime($date ? $date->toDateString() : date(static::DATE_STR));
         $interval = $end->diff($start);
 
         return (int)($interval->format('%r') . (bool)$interval->format('%a'));
@@ -465,7 +461,7 @@ class TDateTime extends Carbon
      */
     protected static function prepareDate($date)
     {
-        if (null===$date) {
+        if (null === $date) {
             return null;
         }
         if ($date instanceof DateTime) {
@@ -475,11 +471,7 @@ class TDateTime extends Carbon
         } elseif (is_object($date) && method_exists($date, 'getTimestamp')) {
             return static::timeToString($date->getTimestamp());
         } elseif (is_string($date)) {
-            try {
-                return strtotime($date) > 0 ? $date : null;
-            } catch (Exception $e) {
-                return null;
-            }
+            return strtotime($date) > 0 ? $date : null;
         }
         return null;
     }
