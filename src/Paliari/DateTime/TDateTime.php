@@ -13,20 +13,25 @@ use Carbon\Carbon,
  */
 class TDateTime extends Carbon
 {
+    const DATE_TIME_STR = 'Y-m-d H:i:s';
+    const DATE_STR = 'Y-m-d';
+
     /**
      * Se o time for string ele aceita o formato TDateTime (d/m/Y H:i:s |d/m/YTH:i:s), não aceita formato americano (m/d/Y H:i:s)
      *
-     * @param string|int|DateTime $time
+     * @param string|int|DateTime|object $time
      * @param DateTimeZone|string $tz
+     *
+     * @throw DomainException
      */
     public function __construct($time = null, $tz = null)
     {
-        if ($time instanceof DateTime) {
-            $time = date('Y-m-d H:i:s', $time->getTimestamp());
-        } elseif (is_numeric($time)) {
-            $time = date('Y-m-d H:i:s', $time);
+        if (null!==$time) {
+            $time = static::prepareDate($time);
+            if (!$time) {
+                throw new DomainException("Data $time inválida!");
+            }
         }
-
         parent::__construct($time, $tz);
         $this->init();
     }
@@ -76,7 +81,7 @@ class TDateTime extends Carbon
      *
      * @return string
      */
-    public function toDateTimeString($format = 'Y-m-d H:i:s')
+    public function toDateTimeString($format = self::DATE_TIME_STR)
     {
         return $this->format($format);
     }
@@ -89,7 +94,7 @@ class TDateTime extends Carbon
      *
      * @return string
      */
-    public function toDateString($format = 'Y-m-d')
+    public function toDateString($format = self::DATE_STR)
     {
         return $this->format($format);
     }
@@ -398,7 +403,7 @@ class TDateTime extends Carbon
     public function intervalDays($datfim = null)
     {
         $datini   = new TDateTime($this->toDateString());
-        $datfim   = new TDateTime($datfim ? $datfim->toDateString() : date('Y-m-d'));
+        $datfim   = new TDateTime($datfim ? $datfim->toDateString() : date(static::DATE_STR));
         $interval = $datini->diff($datfim);
 
         return $interval->format('%r%a');
@@ -411,14 +416,14 @@ class TDateTime extends Carbon
      *  0 quando as datas forem iguais
      *  -1 quando a data passada for menor
      *
-     * @param $date
+     * @param TDateTime $date
      *
      * @return int
      */
     public function compareDate($date = null)
     {
         $datini   = new TDateTime($this->toDateString());
-        $datfim   = new TDateTime($date ? $date->toDateString() : date('Y-m-d'));
+        $datfim   = new TDateTime($date ? $date->toDateString() : date(static::DATE_STR));
         $interval = $datini->diff($datfim);
 
         return (int)($interval->format('%r') . (bool)$interval->format('%a'));
@@ -450,18 +455,45 @@ class TDateTime extends Carbon
      */
     public static function isDate($date)
     {
-        if (!$date) {
-            return false;
-        }
-        if (is_string($date) && strlen($date) < 9) {
-            return false;
-        }
-        try {
-            new static($date);
-
-            return true;
-        } catch (Exception $e) {
-            return false;
-        }
+        return (bool)static::prepareDate($date);
     }
+
+    /**
+     * Prepara data para validar.
+     * @param mixed $date
+     * @return null|string se for uma data valida retorna string no formato universal ou falso caso contrario.
+     */
+    protected static function prepareDate($date)
+    {
+        if (null===$date) {
+            return null;
+        }
+        if ($date instanceof DateTime) {
+            return static::timeToString($date->getTimestamp());
+        } elseif (is_numeric($date)) {
+            return static::timeToString($date);
+        } elseif (is_object($date) && method_exists($date, 'getTimestamp')) {
+            return static::timeToString($date->getTimestamp());
+        } elseif (is_string($date)) {
+            try {
+                strtotime($date);
+                return $date;
+            } catch (Exception $e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Converte timestamp em data universal.
+     *
+     * @param int $time timestamp
+     * @return string
+     */
+    protected static function timeToString($time)
+    {
+        return date(static::DATE_TIME_STR, $time);
+    }
+
 }
