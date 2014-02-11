@@ -487,4 +487,22 @@ class TDateTime extends Carbon
         return date(static::DATE_TIME_STR, $time);
     }
 
+    /**
+     * Verifica se a data instanciada é futuro ignorando as horas.
+     * @return bool
+     */
+    public function isFutureDay()
+    {
+       return !$this->isToday() && $this->isFuture();
+    }
+
+    /**
+     * Verifica se a data instanciada é passado ignorando as horas.
+     * @return bool
+     */
+    public function isPastDay()
+    {
+       return !$this->isToday() && $this->isPast();
+    }
+
 }
