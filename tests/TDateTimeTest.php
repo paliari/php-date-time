@@ -357,4 +357,26 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals(17, $this->dateTime->setSecond(17)->toString('s'));
     }
+
+    /**
+     *
+     * Verifica se isFutureDay está retornando o esperado.
+     */
+    public function testIsFutureDay()
+    {
+        $this->assertEquals(false, $this->dateTime->isFutureDay());
+        $this->dateTime->setYear(5000);
+        $this->assertEquals(true, $this->dateTime->isFutureDay());
+    }
+
+    /**
+     *
+     * Verifica se isFutureDay está retornando o esperado.
+     */
+    public function testIsPastDay()
+    {
+        $this->assertEquals(true, $this->dateTime->isPastDay());
+        $this->dateTime->setYear(5000);
+        $this->assertEquals(false, $this->dateTime->isPastDay());
+    }
 }
