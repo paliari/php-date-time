@@ -489,20 +489,26 @@ class TDateTime extends Carbon
 
     /**
      * Verifica se a data instanciada é futuro ignorando as horas.
+     *
+     * @param null $date
+     *
      * @return bool
      */
-    public function isFutureDay()
+    public function isFutureDayTo($date = null)
     {
-       return !$this->isToday() && $this->isFuture();
+        return $this->compareDate(new TDateTime($date)) == 1;
     }
 
     /**
      * Verifica se a data instanciada é passado ignorando as horas.
+     *
+     * @param null $date
+     *
      * @return bool
      */
-    public function isPastDay()
+    public function isPastDayTo($date = null)
     {
-       return !$this->isToday() && $this->isPast();
+        return $this->compareDate(new TDateTime($date)) == -1;
     }
 
 }
