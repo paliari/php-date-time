@@ -56,7 +56,6 @@ class TDateTime extends Carbon
         }
         return new static($date);
     }
-
     /**
      * Retorna a data em string no formato universal
      *
@@ -468,12 +467,25 @@ class TDateTime extends Carbon
             return static::timeToString($date->getTimestamp());
         } elseif (is_numeric($date)) {
             return static::timeToString($date);
-        } elseif (is_object($date) && method_exists($date, 'getTimestamp')) {
+        } elseif (self::hasTimestamp($date)) {
             return static::timeToString($date->getTimestamp());
         } elseif (is_string($date)) {
-            return strtotime($date) > 0 ? $date : null;
+            return false !== strtotime($date) ? $date : null;
         }
         return null;
+    }
+
+
+    /**
+     * Verifica se é um objeto contendo método getTimestamp
+     *
+     * @param mixed $date
+     *
+     * @return bool
+     */
+    protected static function hasTimestamp($date)
+    {
+        return is_object($date) && method_exists($date, 'getTimestamp');
     }
 
     /**
