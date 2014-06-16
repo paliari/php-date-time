@@ -471,7 +471,7 @@ class TDateTime extends Carbon
         } elseif (is_object($date) && method_exists($date, 'getTimestamp')) {
             return static::timeToString($date->getTimestamp());
         } elseif (is_string($date)) {
-            return strtotime($date) > 0 ? $date : null;
+            return false !== strtotime($date) ? $date : null;
         }
         return null;
     }
