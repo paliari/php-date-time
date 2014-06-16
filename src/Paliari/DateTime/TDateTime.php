@@ -20,9 +20,9 @@ class TDateTime extends Carbon
      * Se o time for string ele aceita o formato TDateTime (d/m/Y H:i:s |d/m/YTH:i:s), não aceita formato americano (m/d/Y H:i:s)
      *
      * @param string|int|DateTime|object $time
-     * @param DateTimeZone|string $tz
+     * @param \DateTimeZone|string $tz
      *
-     * @throw DomainException
+     * @throws DomainException
      */
     public function __construct($time = null, $tz = null)
     {
@@ -51,7 +51,7 @@ class TDateTime extends Carbon
      */
     public static function createDate($date = null)
     {
-        if (!$date) {
+        if (!$date && 0 != $date) {
             return null;
         }
         return new static($date);
