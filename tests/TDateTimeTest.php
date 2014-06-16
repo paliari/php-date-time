@@ -364,9 +364,9 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testIsFutureDay()
     {
-        $this->assertEquals(false, $this->dateTime->isFutureDay());
+        $this->assertEquals(false, $this->dateTime->isFutureDayTo());
         $this->dateTime->setYear(5000);
-        $this->assertEquals(true, $this->dateTime->isFutureDay());
+        $this->assertEquals(true, $this->dateTime->isFutureDayTo());
     }
 
     /**
@@ -375,8 +375,8 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testIsPastDay()
     {
-        $this->assertEquals(true, $this->dateTime->isPastDay());
+        $this->assertEquals(true, $this->dateTime->isPastDayTo());
         $this->dateTime->setYear(5000);
-        $this->assertEquals(false, $this->dateTime->isPastDay());
+        $this->assertEquals(false, $this->dateTime->isPastDayTo());
     }
 }
