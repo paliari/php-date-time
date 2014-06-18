@@ -51,11 +51,23 @@ class TDateTime extends Carbon
      */
     public static function createDate($date = null)
     {
-        if (!$date && 0 != $date) {
+        if (static::isEmpty($date)) {
             return null;
         }
+
         return new static($date);
     }
+
+    /**
+     * @param string|int|TDateTime|null $date
+     *
+     * @return bool
+     */
+    protected static function isEmpty($date)
+    {
+        return !$date && '0' !== (string)$date;
+    }
+
     /**
      * Retorna a data em string no formato universal
      *
