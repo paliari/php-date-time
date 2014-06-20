@@ -8,6 +8,7 @@ namespace Paliari\DateTime;
  */
 class TDate extends TDateTime
 {
+
     /**
      * Seta zero para hora, minuto e segundo.
      */
@@ -15,4 +16,5 @@ class TDate extends TDateTime
     {
         $this->setHour(0)->setMinute(0)->setSecond(0);
     }
+
 }

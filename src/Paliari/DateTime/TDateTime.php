@@ -3,7 +3,6 @@
 namespace Paliari\DateTime;
 
 use Carbon\Carbon,
-    Exception,
     DomainException,
     DateTime;
 
@@ -13,14 +12,15 @@ use Carbon\Carbon,
  */
 class TDateTime extends Carbon
 {
+
     const DATE_TIME_STR = 'Y-m-d H:i:s';
-    const DATE_STR = 'Y-m-d';
+    const DATE_STR      = 'Y-m-d';
 
     /**
      * Se o time for string ele aceita o formato TDateTime (d/m/Y H:i:s |d/m/YTH:i:s), não aceita formato americano (m/d/Y H:i:s)
      *
      * @param string|int|DateTime|object $time
-     * @param \DateTimeZone|string $tz
+     * @param \DateTimeZone|string       $tz
      *
      * @throws DomainException
      */
@@ -409,8 +409,8 @@ class TDateTime extends Carbon
      */
     public function intervalDays($end = null)
     {
-        $start = new TDateTime($this->toDateString());
-        $end = new TDateTime($end ? $end->toDateString() : date(static::DATE_STR));
+        $start    = new TDateTime($this->toDateString());
+        $end      = new TDateTime($end ? $end->toDateString() : date(static::DATE_STR));
         $interval = $start->diff($end);
 
         return $interval->format('%r%a');
@@ -429,8 +429,8 @@ class TDateTime extends Carbon
      */
     public function compareDate($date = null)
     {
-        $start = new TDateTime($this->toDateString());
-        $end = new TDateTime($date ? $date->toDateString() : date(static::DATE_STR));
+        $start    = new TDateTime($this->toDateString());
+        $end      = new TDateTime($date ? $date->toDateString() : date(static::DATE_STR));
         $interval = $end->diff($start);
 
         return (int)($interval->format('%r') . (bool)$interval->format('%a'));
@@ -467,7 +467,9 @@ class TDateTime extends Carbon
 
     /**
      * Prepara data para validar.
+     *
      * @param mixed $date
+     *
      * @return null|string se for uma data valida retorna string no formato universal ou falso caso contrario.
      */
     protected static function prepareDate($date)
@@ -484,6 +486,7 @@ class TDateTime extends Carbon
         } elseif (is_string($date)) {
             return false !== strtotime($date) ? $date : null;
         }
+
         return null;
     }
 
@@ -504,6 +507,7 @@ class TDateTime extends Carbon
      * Converte timestamp em data universal.
      *
      * @param int $time timestamp
+     *
      * @return string
      */
     protected static function timeToString($time)
