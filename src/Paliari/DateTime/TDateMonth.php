@@ -8,6 +8,7 @@ namespace Paliari\DateTime;
  */
 class TDateMonth extends TDateTime
 {
+
     protected function init()
     {
         $this->setDay(1)->setHour(0)->setMinute(0)->setSecond(0);
@@ -20,4 +21,5 @@ class TDateMonth extends TDateTime
     public function __toString(){
         return $this->format('m/Y');
     }
+
 }
