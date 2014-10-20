@@ -409,8 +409,8 @@ class TDateTime extends Carbon
      */
     public function intervalDays($end = null)
     {
-        $start    = new TDateTime($this->toDateString());
-        $end      = new TDateTime($end ? $end->toDateString() : date(static::DATE_STR));
+        $start    = $this->createDateUTC($this->toDateString());
+        $end      = $this->createDateUTC($end ? $end->toDateString() : date(static::DATE_STR));
         $interval = $start->diff($end);
 
         return $interval->format('%r%a');
@@ -429,11 +429,21 @@ class TDateTime extends Carbon
      */
     public function compareDate($date = null)
     {
-        $start    = new TDateTime($this->toDateString());
-        $end      = new TDateTime($date ? $date->toDateString() : date(static::DATE_STR));
+        $start    = $this->createDateUTC($this->toDateString());
+        $end      = $this->createDateUTC($date ? $date->toDateString() : date(static::DATE_STR));
         $interval = $end->diff($start);
 
         return (int)($interval->format('%r') . (bool)$interval->format('%a'));
+    }
+
+    /**
+     * @param string $date
+     *
+     * @return TDateTime
+     */
+    protected function createDateUTC($date)
+    {
+        return new TDateTime($date, 'UTC');
     }
 
     /**
