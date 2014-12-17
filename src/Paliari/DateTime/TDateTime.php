@@ -491,6 +491,8 @@ class TDateTime extends Carbon
             return static::timeToString($date->getTimestamp());
         } elseif (is_numeric($date)) {
             return static::timeToString($date);
+        } elseif (is_array($date)) {
+            return @$date['date'];
         } elseif (self::hasTimestamp($date)) {
             return static::timeToString($date->getTimestamp());
         } elseif (is_string($date)) {
