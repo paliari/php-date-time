@@ -551,4 +551,24 @@ class TDateTime extends Carbon
         return $this->compareDate(new TDateTime($date)) == -1;
     }
 
+    /**
+     * Converte para formato json
+     *
+     * @return string
+     */
+    public function as_json()
+    {
+        return $this->format('Y-m-d\TH:i:s');
+    }
+
+    /**
+     * Converte para formato json
+     *
+     * @return string
+     */
+    public function to_json()
+    {
+        return $this->as_json();
+    }
+
 }
