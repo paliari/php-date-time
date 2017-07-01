@@ -18,9 +18,9 @@
         }
     },
     "require": {
-        "nesbot/Carbon": "1.4.*"
+        "nesbot/Carbon": "^1.22"
     },
     "require-dev": {
-        "zendframework/zendframework1": "1.12.3"
+        "phpunit/phpunit": "^5.7"
     }
 }
