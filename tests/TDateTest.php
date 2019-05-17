@@ -1,8 +1,7 @@
 <?php
-
 use Paliari\DateTime\TDate;
 
-class TDateTest extends PHPUnit_Framework_TestCase
+class TDateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group slow
@@ -14,7 +13,6 @@ class TDateTest extends PHPUnit_Framework_TestCase
         $ano  = date('Y', time()) - 10;
         $mes  = 1;
         $dia  = 0;
-
         while ($ano <= $stop) {
             $timestamp = mktime(0, 0, 0, $mes, $dia + 1, $ano);
             $dia       = date('d', $timestamp);
@@ -38,7 +36,6 @@ class TDateTest extends PHPUnit_Framework_TestCase
         $i   = 0;
         $s   = 0;
         $stp = $d + 30;
-
         while ($d < $stp) {
             $tmstp = mktime($H, $i, $s, $m, $d + 1, $Y);
             $d     = date('d', $tmstp);
@@ -47,7 +44,6 @@ class TDateTest extends PHPUnit_Framework_TestCase
             $H     = date('H', $tmstp);
             $i     = date('i', $tmstp);
             $s     = date('s', $tmstp);
-
             $tDate = new TDate((int)$tmstp);
             $this->assertEquals($tmstp, $tDate->timestamp);
             $tDate = new TDate((string)$tmstp);

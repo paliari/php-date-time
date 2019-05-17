@@ -488,7 +488,6 @@ class TDateTime extends Carbon
         return null;
     }
 
-
     /**
      * Verifica se é um objeto contendo método getTimestamp
      *
