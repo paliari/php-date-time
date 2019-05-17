@@ -31,3 +31,4 @@ Thumbs.db
 *.phar
 Teste.php
 sample.php
+.phpunit.result.cache

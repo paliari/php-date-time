@@ -1,8 +1,7 @@
 <?php
-
 use Paliari\DateTime\TDateTime;
 
-class TDateTimeTest extends PHPUnit_Framework_TestCase
+class TDateTimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var TDateTime
@@ -14,10 +13,7 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public $dateTime;
 
-    /**
-     * Construtor
-     */
-    public function __construct()
+    protected function setUp(): void
     {
         $this->date     = new TDateTime('2013-05-01');
         $this->dateTime = new TDateTime('2013-05-01 22:34:21');
@@ -33,7 +29,6 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
         $ano  = date('Y', time()) - 10;
         $mes  = 1;
         $dia  = 0;
-
         while ($ano <= $stop) {
             $timestamp = mktime(0, 0, 0, $mes, $dia + 1, $ano);
             $dia       = date('d', $timestamp);
@@ -57,16 +52,14 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
         $i   = 0;
         $s   = 0;
         $stp = $d + 30;
-
         while ($d < $stp) {
-            $tmstp = mktime($H, $i, $s, $m, $d + 1, $Y);
-            $d     = date('d', $tmstp);
-            $m     = date('m', $tmstp);
-            $Y     = date('Y', $tmstp);
-            $H     = date('H', $tmstp);
-            $i     = date('i', $tmstp);
-            $s     = date('s', $tmstp);
-
+            $tmstp  = mktime($H, $i, $s, $m, $d + 1, $Y);
+            $d      = date('d', $tmstp);
+            $m      = date('m', $tmstp);
+            $Y      = date('Y', $tmstp);
+            $H      = date('H', $tmstp);
+            $i      = date('i', $tmstp);
+            $s      = date('s', $tmstp);
             $dateBr = new TDateTime((int)$tmstp);
             $this->assertEquals($tmstp, $dateBr->timestamp);
             $dateBr = new TDateTime((string)$tmstp);
@@ -109,15 +102,15 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('2013-09-09', TDateTime::createDate($data)->toDateString());
         $this->assertEquals($data, new TDateTime($data));
         $date = date(DateTime::RSS);
-        $this->assertEquals( $date, TDateTime::createDate($date)->format(DateTime::RSS));
+        $this->assertEquals($date, TDateTime::createDate($date)->format(DateTime::RSS));
         $date = date(DateTime::W3C);
-        $this->assertEquals( $date, TDateTime::createDate($date)->format(DateTime::W3C));
+        $this->assertEquals($date, TDateTime::createDate($date)->format(DateTime::W3C));
         $date = date(DateTime::COOKIE);
-        $this->assertEquals( $date, TDateTime::createDate($date)->format(DateTime::COOKIE));
+        $this->assertEquals($date, TDateTime::createDate($date)->format(DateTime::COOKIE));
         $date = date(TDateTime::DATE_TIME_STR);
-        $this->assertEquals( $date, TDateTime::createDate($date)->format(TDateTime::DATE_TIME_STR));
+        $this->assertEquals($date, TDateTime::createDate($date)->format(TDateTime::DATE_TIME_STR));
         $date = date(DateTime::ATOM);
-        $this->assertEquals( $date, TDateTime::createDate($date)->format(DateTime::ATOM));
+        $this->assertEquals($date, TDateTime::createDate($date)->format(DateTime::ATOM));
     }
 
     /**
@@ -131,19 +124,19 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
 
     /**
      * Verifica se parametro errado gera excecao
-     * @expectedException DomainException
      */
     public function testException()
     {
+        $this->expectException(DomainException::class);
         TDateTime::createDate('nogsgsw');
     }
 
     /**
      * Verifica se parametro errado gera excecao
-     * @expectedException DomainException
      */
     public function testExceptionNew()
     {
+        $this->expectException(DomainException::class);
         new TDateTime('nogsgsw');
     }
 
@@ -314,7 +307,7 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testSetYear()
     {
-        $this->assertEquals(2015, $this->dateTime->setYear(2015)->toString('Y'));
+        $this->assertEquals(2015, $this->dateTime->setYear(2015)->format('Y'));
     }
 
     /**
@@ -322,7 +315,7 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testSetMonths()
     {
-        $this->assertEquals(10, $this->dateTime->setMonth(10)->toString('m'));
+        $this->assertEquals(10, $this->dateTime->setMonth(10)->format('m'));
     }
 
     /**
@@ -330,7 +323,7 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testSetDays()
     {
-        $this->assertEquals(6, $this->dateTime->setDay(6)->toString('d'));
+        $this->assertEquals(6, $this->dateTime->setDay(6)->format('d'));
     }
 
     /**
@@ -338,7 +331,7 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testSetHour()
     {
-        $this->assertEquals(18, $this->dateTime->setHour(18)->toString('H'));
+        $this->assertEquals(18, $this->dateTime->setHour(18)->format('H'));
     }
 
     /**
@@ -346,7 +339,7 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testSetMinute()
     {
-        $this->assertEquals(45, $this->dateTime->setMinute(45)->toString('i'));
+        $this->assertEquals(45, $this->dateTime->setMinute(45)->format('i'));
     }
 
     /**
@@ -355,7 +348,7 @@ class TDateTimeTest extends PHPUnit_Framework_TestCase
      */
     public function testSetSecond()
     {
-        $this->assertEquals(17, $this->dateTime->setSecond(17)->toString('s'));
+        $this->assertEquals(17, $this->dateTime->setSecond(17)->format('s'));
     }
 
     /**
