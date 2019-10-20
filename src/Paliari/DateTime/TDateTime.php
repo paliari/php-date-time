@@ -69,41 +69,27 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna a data em string no formato universal
-     *
-     * @param $format
-     *
      * @return string
      */
-    public function toString($format)
+    public function toString()
     {
-        return $this->format($format);
+        return $this->format(static::DATE_TIME_STR);
     }
 
     /**
-     * Converte uma data para string formatada de acordo com o parametro passado.
-     * Defaut: Y-m-d H:i:s
-     *
-     * @param string $format
-     *
      * @return string
      */
-    public function toDateTimeString($format = self::DATE_TIME_STR)
+    public function toDateTimeString()
     {
-        return $this->format($format);
+        return $this->format(static::DATE_TIME_STR);
     }
 
     /**
-     * Converte uma data para string formatada de acordo com o parametro passado.
-     * Defaut: Y-m-d
-     *
-     * @param string $format
-     *
      * @return string
      */
-    public function toDateString($format = self::DATE_STR)
+    public function toDateString()
     {
-        return $this->format($format);
+        return $this->format(static::DATE_STR);
     }
 
     /**
