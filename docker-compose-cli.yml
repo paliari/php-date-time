@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+  cli:
+    image: paliari/apache-php7-oci8:1.0.1-dev
+    command: bash
+    volumes:
+      - .:/var/www/html:cached
+      - ~/.composer:/root/.composer
+      - ~/.gitconfig:/root/.gitconfig
