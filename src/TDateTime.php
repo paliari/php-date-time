@@ -79,14 +79,6 @@ class TDateTime extends Carbon
     /**
      * @return string
      */
-    public function toDateTimeString()
-    {
-        return $this->format(static::DATE_TIME_STR);
-    }
-
-    /**
-     * @return string
-     */
     public function toDateString()
     {
         return $this->format(static::DATE_STR);
