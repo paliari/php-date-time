@@ -401,7 +401,7 @@ class TDateTime extends Carbon
         $end      = $this->createDateUTC($end ? $end->toDateString() : date(static::DATE_STR));
         $interval = $start->diff($end);
 
-        return $interval->format('%r%a');
+        return (int)$interval->format('%r%a');
     }
 
     /**

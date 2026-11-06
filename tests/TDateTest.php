@@ -57,11 +57,11 @@ class TDateTest extends \PHPUnit\Framework\TestCase
     public function testIntervaloDias()
     {
         $date = new TDate('2013-10-01');
-        $this->assertEquals(30, $date->intervalDays(new TDate('2013-10-31')));
+        $this->assertSame(30, $date->intervalDays(new TDate('2013-10-31')));
         $date = new TDate('2013-09-01');
-        $this->assertEquals(-7, $date->intervalDays(new TDate('2013-08-25')));
+        $this->assertSame(-7, $date->intervalDays(new TDate('2013-08-25')));
         $date = new TDate('2013-11-01');
-        $this->assertEquals(30, $date->intervalDays(new TDate('2013-12-1')));
+        $this->assertSame(30, $date->intervalDays(new TDate('2013-12-1')));
     }
 
     /**

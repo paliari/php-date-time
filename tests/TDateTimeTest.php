@@ -73,12 +73,12 @@ class TDateTimeTest extends \PHPUnit\Framework\TestCase
     public function testIntervaloDias()
     {
         $date = new TDateTime('2013-10-01');
-        $this->assertEquals(30, $date->intervalDays(new TDateTime('2013-10-31')));
+        $this->assertSame(30, $date->intervalDays(new TDateTime('2013-10-31')));
         $date = new TDateTime('2013-09-01');
-        $this->assertEquals(-7, $date->intervalDays(new TDateTime('2013-08-25')));
+        $this->assertSame(-7, $date->intervalDays(new TDateTime('2013-08-25')));
         $date = new TDateTime('2013-11-01');
-        $this->assertEquals(30, $date->intervalDays(new TDateTime('2013-12-1')));
-        $this->assertEquals(0, $date->intervalDays(new TDateTime('2013-11-01 23:59:59')));
+        $this->assertSame(30, $date->intervalDays(new TDateTime('2013-12-1')));
+        $this->assertSame(0, $date->intervalDays(new TDateTime('2013-11-01 23:59:59')));
     }
 
     /**
