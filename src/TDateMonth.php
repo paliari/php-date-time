@@ -16,7 +16,7 @@ class TDateMonth extends TDateTime
 
     /**
      * Retona data em string para ser impressa.
-     * @return bool|string
+     * @return string
      */
     public function __toString(){
         return $this->format('m/Y');

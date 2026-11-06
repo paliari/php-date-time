@@ -35,16 +35,17 @@ public function addDay($value = 1)
 - Usar `static::` (não `self::`) em factories/constantes para respeitar a subclasse.
 - Entrada inválida no construtor lança `DomainException("Data $time inválida!")`;
   `createDate()` retorna `null` para vazio (mas `'0'` é válido e vira timestamp 0).
-- `prepareDate()` é o único ponto de parsing: aceita `DateTime`, numérico (timestamp),
-  array com chave `date`, objeto com `getTimestamp()` e string aceita por `strtotime()`.
+- No construtor, timestamp / `DateTime` / objeto com `getTimestamp()` passam por
+  `extractTimestamp()` e são construídos pelo instante exato (`'@' . $ts` + `setTimezone`).
+  Demais entradas (string, array com chave `date`) passam por `prepareDate()`.
+- `prepareDate()` também é usado por `isDate()`: não mudar sua assinatura.
 
 ## Armadilhas conhecidas
 
 - **Instâncias são mutáveis** (Carbon mutável): `addDay()`, `setHour()` etc. alteram `$this`.
   Para não alterar o original, `clone` antes (como em `firstDayOfMonth()`).
-- Strings `xx/xx/yyyy` são lidas como americano (`m/d/Y`) pelo `strtotime`; o docblock
-  do construtor que diz o contrário está errado.
-- `intervalDays()` retorna `string` (ex.: `"30"`) apesar do docblock dizer `int`.
-- `getDayOfYear()` é base 0 (`format('z')`), apesar do docblock dizer "1 a 365".
+- Strings `xx/xx/yyyy` são lidas como americano (`m/d/Y`) pelo `strtotime`. Comportamento
+  mantido por compatibilidade (coberto por teste).
+- `getDayOfYear()` é base 0 (`format('z')`), mantido por compatibilidade; base 1 é `->dayOfYear`.
 - `addMonth()` sofre overflow (31/01 + 1 mês = 03/03); usar `addMonthsNoOverflow()` quando preciso.
 - `compareDate()`/`intervalDays()` comparam apenas a data, em UTC, ignorando horas.

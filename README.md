@@ -48,6 +48,13 @@ echo new TDateMonth('2013-05-17 10:00:00');         // "05/2013"
 Strings são interpretadas por `strtotime()`. Use o formato `Y-m-d` / `Y-m-d H:i:s`:
 `xx/xx/yyyy` é lido no formato **americano** (`'05/01/2013'` é 1º de maio).
 
+Timestamps e objetos `DateTime` preservam o instante e são convertidos para o timezone informado
+(ou para o timezone padrão do PHP):
+
+```php
+(new TDateTime(1367366400, 'America/Sao_Paulo'))->toString(); // "2013-04-30 21:00:00"
+```
+
 ### Validação
 
 ```php
@@ -111,7 +118,7 @@ $dt->compareDate(new TDateTime('2013-09-25'));        // 1   (instância é maio
 $dt->compareDate(new TDateTime('2013-10-01 23:00'));  // 0   (mesmo dia)
 $dt->compareDate(new TDateTime('2013-10-25'));        // -1  (instância é menor)
 
-$dt->intervalDays(new TDateTime('2013-10-31'));       // "30"
+$dt->intervalDays(new TDateTime('2013-10-31'));       // 30
 
 $dt->isFutureDayTo();   // a data é depois de hoje?
 $dt->isPastDayTo();     // a data é antes de hoje?
@@ -132,8 +139,7 @@ comparam com a data atual.
 
 - **Overflow de mês.** `(new TDateTime('2013-01-31'))->addMonth()` resulta em `2013-03-03`.
   Use `addMonthsNoOverflow()` do Carbon quando precisar parar no último dia do mês.
-- `intervalDays()` retorna `string` (ex.: `"30"`); faça cast para `int` se necessário.
-- `getDayOfYear()` começa em `0` (1º de janeiro = `0`).
+- `getDayOfYear()` começa em `0` (1º de janeiro = `0`). Para base 1 use `$dt->dayOfYear`.
 - `compare()` está depreciado; use `compareDate()`.
 
 ## Desenvolvimento

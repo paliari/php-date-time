@@ -106,9 +106,10 @@ class TDateTime extends Carbon
     }
 
     /**
-     * Retorna o dia do ano de:
-     *  1 a 365 para anos normais
-     *  1 a 366 para anos bissextos
+     * Retorna o dia do ano em base 0 (1º de janeiro = 0):
+     *  0 a 364 para anos normais
+     *  0 a 365 para anos bissextos
+     * Para base 1 use a propriedade $this->dayOfYear.
      * @return int
      */
     public function getDayOfYear()
@@ -199,7 +200,7 @@ class TDateTime extends Carbon
 
     /**
      * Retorna os meses de uma TDateTime
-     * @return string
+     * @return int
      */
     public function getMonth()
     {
@@ -208,7 +209,7 @@ class TDateTime extends Carbon
 
     /**
      * Retorna os dias de uma TDateTime
-     * @return string
+     * @return int
      */
     public function getDay()
     {
@@ -217,7 +218,7 @@ class TDateTime extends Carbon
 
     /**
      * Retorna as horas de uma TDateTime
-     * @return string
+     * @return int
      */
     public function getHour()
     {
@@ -226,7 +227,7 @@ class TDateTime extends Carbon
 
     /**
      * Retorna os minutos de uma TDateTime
-     * @return string
+     * @return int
      */
     public function getMinute()
     {
@@ -235,7 +236,7 @@ class TDateTime extends Carbon
 
     /**
      * Retorna os segundos de uma TDateTime
-     * @return string
+     * @return int
      */
     public function getSecond()
     {
