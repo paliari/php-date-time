@@ -63,4 +63,14 @@ class TDateTest extends \PHPUnit\Framework\TestCase
         $date = new TDate('2013-11-01');
         $this->assertEquals(30, $date->intervalDays(new TDate('2013-12-1')));
     }
+
+    /**
+     * Verifica se a hora é zerada no timezone informado
+     */
+    public function testConstructTimestampWithTimezone()
+    {
+        $date = new TDate(1367366400, 'America/Sao_Paulo');
+        $this->assertSame('2013-04-30 00:00:00', $date->toString());
+        $this->assertSame('America/Sao_Paulo', $date->tzName);
+    }
 }

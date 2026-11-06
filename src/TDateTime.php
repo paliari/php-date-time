@@ -17,7 +17,11 @@ class TDateTime extends Carbon
     const DATE_STR      = 'Y-m-d';
 
     /**
-     * Se o time for string ele aceita o formato TDateTime (d/m/Y H:i:s |d/m/YTH:i:s), não aceita formato americano (m/d/Y H:i:s)
+     * Strings são interpretadas pelo strtotime: use Y-m-d ou Y-m-d H:i:s.
+     * Datas com barra (xx/xx/yyyy) são lidas no formato americano (m/d/Y).
+     *
+     * Timestamps e objetos com getTimestamp() preservam o instante e são convertidos para $tz
+     * (ou para o timezone padrão quando $tz não for informado).
      *
      * @param string|int|DateTime|object $time
      * @param \DateTimeZone|string       $tz
@@ -26,14 +30,20 @@ class TDateTime extends Carbon
      */
     public function __construct($time = null, $tz = null)
     {
-        if (null !== $time) {
-            $date = static::prepareDate($time);
-            if (!$date) {
-                throw new DomainException("Data $time inválida!");
+        $timestamp = static::extractTimestamp($time);
+        if (null !== $timestamp) {
+            parent::__construct('@' . $timestamp);
+            $this->setTimezone($tz ?: date_default_timezone_get());
+        } else {
+            if (null !== $time) {
+                $date = static::prepareDate($time);
+                if (!$date) {
+                    throw new DomainException("Data $time inválida!");
+                }
+                $time = $date;
             }
-            $time = $date;
+            parent::__construct($time, $tz);
         }
-        parent::__construct($time, $tz);
         $this->init();
     }
 
@@ -475,6 +485,25 @@ class TDateTime extends Carbon
             return static::timeToString($date->getTimestamp());
         } elseif (is_string($date)) {
             return false !== strtotime($date) ? $date : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Extrai o timestamp de valores que representam um instante absoluto.
+     *
+     * @param mixed $time
+     *
+     * @return int|null timestamp ou null quando $time não for numérico nem objeto com getTimestamp()
+     */
+    protected static function extractTimestamp($time)
+    {
+        if ($time instanceof DateTime || static::hasTimestamp($time)) {
+            return $time->getTimestamp();
+        }
+        if (is_numeric($time)) {
+            return (int)$time;
         }
 
         return null;

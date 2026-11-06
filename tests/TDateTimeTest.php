@@ -78,6 +78,69 @@ class TDateTimeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(-7, $date->intervalDays(new TDateTime('2013-08-25')));
         $date = new TDateTime('2013-11-01');
         $this->assertEquals(30, $date->intervalDays(new TDateTime('2013-12-1')));
+        $this->assertEquals(0, $date->intervalDays(new TDateTime('2013-11-01 23:59:59')));
+    }
+
+    /**
+     * Verifica se timestamp com timezone preserva o instante e converte para o timezone informado
+     */
+    public function testConstructTimestampWithTimezone()
+    {
+        $timestamp = 1367366400;
+        $date      = new TDateTime($timestamp, 'America/Sao_Paulo');
+        $this->assertSame($timestamp, $date->timestamp);
+        $this->assertSame('America/Sao_Paulo', $date->tzName);
+        $this->assertSame('2013-04-30 21:00:00', $date->toString());
+        $this->assertSame(
+            \Carbon\Carbon::createFromTimestamp($timestamp, 'America/Sao_Paulo')->toDateTimeString(),
+            $date->toString()
+        );
+        $date = new TDateTime((string)$timestamp, new DateTimeZone('America/Sao_Paulo'));
+        $this->assertSame($timestamp, $date->timestamp);
+    }
+
+    /**
+     * Verifica se timestamp sem timezone usa o timezone padrao
+     */
+    public function testConstructTimestampWithoutTimezone()
+    {
+        $timestamp = 1367366400;
+        $date      = new TDateTime($timestamp);
+        $this->assertSame($timestamp, $date->timestamp);
+        $this->assertSame(date_default_timezone_get(), $date->tzName);
+        $this->assertSame(date(TDateTime::DATE_TIME_STR, $timestamp), $date->toString());
+    }
+
+    /**
+     * Verifica se DateTime com timezone preserva o instante
+     */
+    public function testConstructDateTimeWithTimezone()
+    {
+        $dateTime = new DateTime('2013-05-01 10:00:00', new DateTimeZone('America/Sao_Paulo'));
+        $date     = new TDateTime($dateTime, 'America/Sao_Paulo');
+        $this->assertSame($dateTime->getTimestamp(), $date->timestamp);
+        $this->assertSame('2013-05-01 10:00:00', $date->toString());
+        $date = new TDateTime($dateTime, 'UTC');
+        $this->assertSame($dateTime->getTimestamp(), $date->timestamp);
+        $this->assertSame('2013-05-01 13:00:00', $date->toString());
+    }
+
+    /**
+     * Verifica se o dia do ano continua em base 0
+     */
+    public function testGetDayOfYear()
+    {
+        $this->assertSame(0, (new TDateTime('2013-01-01'))->getDayOfYear());
+        $this->assertSame(120, (new TDateTime('2013-05-01'))->getDayOfYear());
+        $this->assertSame(365, (new TDateTime('2012-12-31'))->getDayOfYear());
+    }
+
+    /**
+     * Verifica se datas com barra continuam sendo lidas no formato americano (m/d/Y)
+     */
+    public function testConstructSlashDateIsAmerican()
+    {
+        $this->assertSame('2013-05-01', (new TDateTime('05/01/2013'))->toDateString());
     }
 
     /**
