@@ -1,5 +1,6 @@
 <?php
 use Paliari\DateTime\TDateTime;
+use PHPUnit\Framework\Attributes\Group;
 
 class TDateTimeTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,9 +21,9 @@ class TDateTimeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @group slow
      * Testa um intervalo de 15 anos se todos dias estão sendo gerados corretamente pelo DateBr
      */
+    #[Group('slow')]
     public function testContructDataUniversal()
     {
         $stop = date('Y', time()) + 5;
@@ -40,9 +41,9 @@ class TDateTimeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @group slow
      * Testa o construtor do DateBr passando timestemp por 30 dias
      */
+    #[Group('slow')]
     public function testContructTimestamp()
     {
         $Y = date('Y', time());
