@@ -1,6 +1,8 @@
 php-date-time
 =============
 
+[![tests](https://github.com/paliari/php-date-time/actions/workflows/tests.yml/badge.svg)](https://github.com/paliari/php-date-time/actions/workflows/tests.yml)
+
 Tratamento de Data e Hora para PHP.
 
 Extensão do [Carbon 2](https://carbon.nesbot.com/docs/) com validação de entrada, classes
@@ -8,8 +10,8 @@ especializadas para data e mês e helpers com nomes simples (`addDay`, `setMonth
 
 ## Requisitos
 
-- PHP 7.2+
-- [nesbot/carbon](https://github.com/briannesbitt/Carbon) `^2.18`
+- PHP 8.2+ (testado de 8.2 a 8.5)
+- [nesbot/carbon](https://github.com/briannesbitt/Carbon) `^2.73`
 
 ## Instalação
 
@@ -150,11 +152,14 @@ vendor/bin/phpunit                        # suíte completa
 vendor/bin/phpunit --exclude-group slow   # pula os testes longos
 ```
 
-Ambiente Docker (PHP 7):
+Ambiente Docker (PHP 8.5 por padrão):
 
 ```bash
-docker compose -f docker-compose-cli.yml run --rm cli
+docker compose -f docker-compose-cli.yml run --rm --build cli
+PHP_VERSION=8.2 docker compose -f docker-compose-cli.yml run --rm --build cli   # outra versão
 ```
+
+O CI roda a suíte em PHP 8.2, 8.3, 8.4 e 8.5.
 
 ## Licença
 

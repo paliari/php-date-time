@@ -4,13 +4,16 @@ globs: tests/**/*.php
 alwaysApply: false
 ---
 
-# Testes (PHPUnit 8)
+# Testes (PHPUnit 11)
 
 - Um arquivo por classe: `tests/<Classe>Test.php`, sem namespace,
   `class <Classe>Test extends \PHPUnit\Framework\TestCase`.
-- `setUp(): void` e `tearDown(): void` com retorno `void` (exigido pelo PHPUnit 8).
+- `setUp(): void` e `tearDown(): void` com retorno `void`.
 - Um docblock em português acima de cada teste descrevendo o que é verificado.
-- Testes com loops longos ou de varredura de datas levam `@group slow`.
+- Metadados **só via atributos**, nunca annotations em docblock (`@group`, `@dataProvider`...):
+  geram PHPUnit deprecation e o `phpunit.xml` falha nelas.
+- Testes com loops longos ou de varredura de datas levam `#[Group('slow')]`
+  (`use PHPUnit\Framework\Attributes\Group;`).
 - Exceções: `$this->expectException(DomainException::class);` antes da chamada.
 
 ## Datas determinísticas
