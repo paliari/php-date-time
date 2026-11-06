@@ -5,7 +5,7 @@ alwaysApply: true
 
 # paliari/php-date-time
 
-Biblioteca Composer (`type: library`, MIT) publicada no Packagist que estende o Carbon 2
+Biblioteca Composer (`type: library`, MIT) publicada no Packagist que estende o Carbon 3
 com helpers de data/hora em português. Consumida por outros projetos: **a API pública é contrato**.
 
 ## Estrutura
@@ -18,12 +18,13 @@ com helpers de data/hora em português. Consumida por outros projetos: **a API p
 
 ## Stack e compatibilidade
 
-- PHP `^8.2` (CI em 8.2, 8.3, 8.4 e 8.5), `nesbot/carbon: ^2.73`, `phpunit/phpunit: ^11.5`.
+- PHP `^8.2` (CI em 8.2, 8.3, 8.4 e 8.5), `nesbot/carbon: ^3.15`, `phpunit/phpunit: ^11.5`.
 - Sintaxe do PHP 8.2 liberada na implementação (`match`, `??`, `readonly`, enums, named args...).
-- **Não** adicionar tipos nativos de parâmetro/retorno em métodos públicos/protegidos existentes:
+- **Não** adicionar tipos nativos de parâmetro/retorno nos métodos próprios da lib:
   muda o comportamento (TypeError/coerção) e quebra subclasses de quem usa a lib.
-- Não migrar para Carbon 3 sem pedido explícito: a `TDateTime` herda a API do Carbon e o 3
-  muda métodos herdados (`diffIn*` retorna float, `createFromTimestamp` usa UTC...).
+  Exceção: overrides de métodos tipados do Carbon 3 repetem a assinatura do pai.
+- Carbon 2 vive na branch `2.x` (versões `2.x`); não voltar ao Carbon 2 na `master`.
+  Correções que valem para as duas linhas: fazer na `2.x` e trazer para a `master`.
 - Não subir para PHPUnit 12 enquanto o mínimo for PHP 8.2 (o 12 exige 8.3).
 
 ## Comandos
@@ -31,7 +32,7 @@ com helpers de data/hora em português. Consumida por outros projetos: **a API p
 ```bash
 composer install
 vendor/bin/phpunit                      # suíte completa
-vendor/bin/phpunit --exclude-group slow # pula os loops de 15 anos
+vendor/bin/phpunit --exclude-group slow # pula os loops de 2010 a 2030
 docker compose -f docker-compose-cli.yml run --rm --build cli                  # PHP 8.5
 PHP_VERSION=8.2 docker compose -f docker-compose-cli.yml run --rm --build cli  # versão mínima
 ```
@@ -41,7 +42,9 @@ warnings vindos de `src/`. O CI fica em `.github/workflows/tests.yml`.
 
 ## Git e versionamento
 
-- Remote no GitHub, fluxo git-flow: `develop`, `master`, `release/x.y.z`, `hotfix/x.y.z`.
+- Remote no GitHub, fluxo git-flow: `develop`, `master`, `release/x.y.z`, `hotfix/x.y.z`;
+  branch de manutenção `2.x` (Carbon 2).
+- Nunca mover nem recriar uma tag já enviada ao remote (o Packagist já indexou).
 - Tags semver **sem** prefixo `v` (ex.: `1.0.2`). A versão real vem das tags;
   o arquivo `VERSION` está desatualizado (0.7.12) e `VERSION.orig.orig` é resto de merge.
 - Mensagens de commit no estilo conventional commits (`fix:`, `feat:`, `test:`...).

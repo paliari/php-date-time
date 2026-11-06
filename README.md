@@ -5,13 +5,22 @@ php-date-time
 
 Tratamento de Data e Hora para PHP.
 
-Extensão do [Carbon 2](https://carbon.nesbot.com/docs/) com validação de entrada, classes
+Extensão do [Carbon 3](https://carbon.nesbot.com/docs/) com validação de entrada, classes
 especializadas para data e mês e helpers com nomes simples (`addDay`, `setMonth`, `compareDate`...).
 
 ## Requisitos
 
 - PHP 8.2+ (testado de 8.2 a 8.5)
-- [nesbot/carbon](https://github.com/briannesbitt/Carbon) `^2.73`
+- [nesbot/carbon](https://github.com/CarbonPHP/carbon) `^3.15`
+
+## Versões
+
+| Versão | Carbon  | PHP   | Branch   |
+|--------|---------|-------|----------|
+| `3.x`  | `^3.15` | 8.2+  | `master` |
+| `2.x`  | `^2.73` | 8.2+  | `2.x`    |
+
+Se o seu projeto ainda depende do Carbon 2, use `composer require paliari/php-date-time:^2.0`.
 
 ## Instalação
 
@@ -143,6 +152,19 @@ comparam com a data atual.
   Use `addMonthsNoOverflow()` do Carbon quando precisar parar no último dia do mês.
 - `getDayOfYear()` começa em `0` (1º de janeiro = `0`). Para base 1 use `$dt->dayOfYear`.
 - `compare()` está depreciado; use `compareDate()`.
+
+## Migrando da 2.x para a 3.x
+
+Os métodos da própria biblioteca (`createDate`, `addDay`, `compareDate`, `intervalDays`, `TDate`,
+`TDateMonth`...) mantêm o mesmo comportamento. O que muda vem do Carbon 3, já que `TDateTime`
+estende `Carbon\Carbon`:
+
+- **Métodos herdados do Carbon mudaram.** Por exemplo, `diffInDays()` e os demais `diffIn*`
+  retornam `float` com sinal (`-36.5`) em vez de `int` absoluto (`36`), e `createFromTimestamp()`
+  passa a usar UTC em vez do timezone padrão. Veja o [guia de migração do Carbon 3](https://carbon.nesbot.com/docs/#api-carbon-3).
+  Para diferença em dias inteiros entre datas, `intervalDays()` continua retornando `int`.
+- **Subclasses** que sobrescrevem `toString()` ou `toDateString()` precisam declarar o retorno
+  `: string`, como no Carbon 3.
 
 ## Desenvolvimento
 

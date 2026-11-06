@@ -10,8 +10,11 @@ alwaysApply: false
 
 - Nunca remover nem renomear métodos públicos; inclusive os legados `as_json()`, `to_json()`
   (snake_case) e `compare()`. Para substituir, marcar com `@deprecated` apontando o novo método.
-- Não adicionar tipos de parâmetro/retorno em métodos que sobrescrevem o Carbon
-  (`setDay`, `addDay`, `toDateString`...): a assinatura precisa bater com a do pai.
+- Overrides de métodos tipados do Carbon 3 repetem a assinatura do pai, senão dá erro fatal:
+  `toString(): string`, `toDateString(): string`. Ao criar um método novo, conferir se o
+  Carbon 3 já tem um método real com o mesmo nome.
+- Nos métodos próprios da lib (`setDay`, `addDay`, `compareDate`...), não adicionar tipos
+  nativos: muda o comportamento para quem usa.
 - Documentar tipos via docblock, no padrão já usado:
 
 ```php
