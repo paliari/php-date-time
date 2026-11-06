@@ -5,13 +5,13 @@ use PHPUnit\Framework\Attributes\Group;
 class TDateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Testa um intervalo de 15 anos se todos dias estão sendo gerados corretamente pelo TDate
+     * Testa de 2010 a 2030 se todos dias estão sendo gerados corretamente pelo TDate
      */
     #[Group('slow')]
     public function testContructDataUniversal()
     {
-        $stop = date('Y', time()) + 5;
-        $ano  = date('Y', time()) - 10;
+        $stop = 2030;
+        $ano  = 2010;
         $mes  = 1;
         $dia  = 0;
         while ($ano <= $stop) {
@@ -30,8 +30,8 @@ class TDateTest extends \PHPUnit\Framework\TestCase
     #[Group('slow')]
     public function testContructTimestamp()
     {
-        $Y = date('Y', time());
-        $m = date('m', time());;
+        $Y = 2013;
+        $m = 1;
         $d   = 0;
         $H   = 0;
         $i   = 0;
@@ -63,6 +63,17 @@ class TDateTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(-7, $date->intervalDays(new TDate('2013-08-25')));
         $date = new TDate('2013-11-01');
         $this->assertSame(30, $date->intervalDays(new TDate('2013-12-1')));
+    }
+
+    /**
+     * Verifica se a hora é zerada quando a entrada tem hora
+     */
+    public function testInitZerosTime()
+    {
+        $this->assertSame('2013-05-01 00:00:00', (new TDate('2013-05-01 22:34:21'))->toString());
+        $this->assertSame('2013-05-01 00:00:00', (new TDate(new DateTime('2013-05-01 22:34:21')))->toString());
+        $this->assertSame('2013-05-01 00:00:00', (new TDate(['date' => '2013-05-01 22:34:21']))->toString());
+        $this->assertInstanceOf(TDate::class, TDate::createDate('2013-05-01 22:34:21'));
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 use Paliari\DateTime\TDateTime;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
 class TDateTimeTest extends \PHPUnit\Framework\TestCase
@@ -21,13 +22,13 @@ class TDateTimeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Testa um intervalo de 15 anos se todos dias estão sendo gerados corretamente pelo DateBr
+     * Testa de 2010 a 2030 se todos dias estão sendo gerados corretamente pelo DateBr
      */
     #[Group('slow')]
     public function testContructDataUniversal()
     {
-        $stop = date('Y', time()) + 5;
-        $ano  = date('Y', time()) - 10;
+        $stop = 2030;
+        $ano  = 2010;
         $mes  = 1;
         $dia  = 0;
         while ($ano <= $stop) {
@@ -46,8 +47,8 @@ class TDateTimeTest extends \PHPUnit\Framework\TestCase
     #[Group('slow')]
     public function testContructTimestamp()
     {
-        $Y = date('Y', time());
-        $m = date('m', time());;
+        $Y = 2013;
+        $m = 1;
         $d   = 0;
         $H   = 0;
         $i   = 0;
@@ -160,21 +161,16 @@ class TDateTimeTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateDate()
     {
-        $this->assertEquals(date('Y-m-d H:i:s', time()), TDateTime::createDate('now'));
+        $this->assertEqualsWithDelta(time(), TDateTime::createDate('now')->timestamp, 2);
         $this->assertEquals('2013-11-07 00:00:00', TDateTime::createDate('2013-11-07')->toDateTimeString());
         $data = new TDateTime('2013-09-09');
         $this->assertEquals('2013-09-09', TDateTime::createDate($data)->toDateString());
         $this->assertEquals($data, new TDateTime($data));
-        $date = date(DateTime::RSS);
-        $this->assertEquals($date, TDateTime::createDate($date)->format(DateTime::RSS));
-        $date = date(DateTime::W3C);
-        $this->assertEquals($date, TDateTime::createDate($date)->format(DateTime::W3C));
-        $date = date(DateTime::COOKIE);
-        $this->assertEquals($date, TDateTime::createDate($date)->format(DateTime::COOKIE));
-        $date = date(TDateTime::DATE_TIME_STR);
-        $this->assertEquals($date, TDateTime::createDate($date)->format(TDateTime::DATE_TIME_STR));
-        $date = date(DateTime::ATOM);
-        $this->assertEquals($date, TDateTime::createDate($date)->format(DateTime::ATOM));
+        $timestamp = 1383831921;
+        foreach ([DateTime::RSS, DateTime::W3C, DateTime::COOKIE, TDateTime::DATE_TIME_STR, DateTime::ATOM] as $format) {
+            $date = date($format, $timestamp);
+            $this->assertSame($timestamp, TDateTime::createDate($date)->timestamp, $format);
+        }
     }
 
     /**
@@ -435,5 +431,179 @@ class TDateTimeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $this->dateTime->isPastDayTo());
         $this->dateTime->setYear(5000);
         $this->assertEquals(false, $this->dateTime->isPastDayTo());
+    }
+
+    public static function addSubWrapperProvider(): array
+    {
+        return [
+            'addYear'           => ['addYear', 2, '2015-05-01 12:30:30'],
+            'addYear default'   => ['addYear', null, '2014-05-01 12:30:30'],
+            'addMonth'          => ['addMonth', 2, '2013-07-01 12:30:30'],
+            'addMonth default'  => ['addMonth', null, '2013-06-01 12:30:30'],
+            'addDay'            => ['addDay', 2, '2013-05-03 12:30:30'],
+            'addDay default'    => ['addDay', null, '2013-05-02 12:30:30'],
+            'addHour'           => ['addHour', 2, '2013-05-01 14:30:30'],
+            'addHour default'   => ['addHour', null, '2013-05-01 13:30:30'],
+            'addMinute'         => ['addMinute', 2, '2013-05-01 12:32:30'],
+            'addMinute default' => ['addMinute', null, '2013-05-01 12:31:30'],
+            'addSecond'         => ['addSecond', 2, '2013-05-01 12:30:32'],
+            'addSecond default' => ['addSecond', null, '2013-05-01 12:30:31'],
+            'subYear'           => ['subYear', 2, '2011-05-01 12:30:30'],
+            'subYear default'   => ['subYear', null, '2012-05-01 12:30:30'],
+            'subMonth'          => ['subMonth', 2, '2013-03-01 12:30:30'],
+            'subMonth default'  => ['subMonth', null, '2013-04-01 12:30:30'],
+            'subDay'            => ['subDay', 2, '2013-04-29 12:30:30'],
+            'subDay default'    => ['subDay', null, '2013-04-30 12:30:30'],
+            'subHour'           => ['subHour', 2, '2013-05-01 10:30:30'],
+            'subHour default'   => ['subHour', null, '2013-05-01 11:30:30'],
+            'subMinute'         => ['subMinute', 2, '2013-05-01 12:28:30'],
+            'subMinute default' => ['subMinute', null, '2013-05-01 12:29:30'],
+            'subSecond'         => ['subSecond', 2, '2013-05-01 12:30:28'],
+            'subSecond default' => ['subSecond', null, '2013-05-01 12:30:29'],
+        ];
+    }
+
+    /**
+     * Verifica os atalhos add* e sub* da TDateTime (com valor e com o padrão 1),
+     * e se alteram a própria instância
+     */
+    #[DataProvider('addSubWrapperProvider')]
+    public function testAddSubWrappers(string $method, ?int $value, string $expected)
+    {
+        $date   = new TDateTime('2013-05-01 12:30:30');
+        $result = null === $value ? $date->$method() : $date->$method($value);
+        $this->assertSame($date, $result);
+        $this->assertSame($expected, $date->toString());
+    }
+
+    /**
+     * Verifica se firstDayOfMonth retorna uma cópia no primeiro dia do mês sem alterar o original
+     */
+    public function testFirstDayOfMonth()
+    {
+        $date  = new TDateTime('2013-05-17 10:20:30');
+        $first = $date->firstDayOfMonth();
+        $this->assertInstanceOf(TDateTime::class, $first);
+        $this->assertNotSame($date, $first);
+        $this->assertSame('2013-05-01 00:00:00', $first->toString());
+        $this->assertSame('2013-05-17 10:20:30', $date->toString());
+    }
+
+    /**
+     * Verifica a conversão para o formato json
+     */
+    public function testJson()
+    {
+        $this->assertSame('2013-05-01T22:34:21', $this->dateTime->as_json());
+        $this->assertSame('2013-05-01T22:34:21', $this->dateTime->to_json());
+    }
+
+    /**
+     * Verifica se o compare depreciado continua igual ao compareDate
+     */
+    public function testCompareDeprecated()
+    {
+        $date = new TDateTime('2013-10-01');
+        $this->assertSame(1, $date->compare(new TDateTime('2013-09-25')));
+        $this->assertSame(0, $date->compare(new TDateTime('2013-10-01 23:00:00')));
+        $this->assertSame(-1, $date->compare(new TDateTime('2013-10-25')));
+    }
+
+    /**
+     * Verifica a criação a partir de array com a chave date
+     */
+    public function testConstructFromArray()
+    {
+        $this->assertSame('2013-05-01 10:00:00', (new TDateTime(['date' => '2013-05-01 10:00:00']))->toString());
+    }
+
+    /**
+     * Verifica a criação a partir de objetos com getTimestamp que não estendem DateTime
+     */
+    public function testConstructFromTimestampObject()
+    {
+        $immutable = new DateTimeImmutable('2013-05-01 10:00:00', new DateTimeZone('America/Sao_Paulo'));
+        $date      = new TDateTime($immutable);
+        $this->assertSame($immutable->getTimestamp(), $date->timestamp);
+
+        $object = new class {
+            public function getTimestamp()
+            {
+                return 1367366400;
+            }
+        };
+        $this->assertSame(1367366400, (new TDateTime($object))->timestamp);
+    }
+
+    /**
+     * Verifica que '0' e 0 são datas válidas (epoch) e que valores vazios retornam null
+     */
+    public function testCreateDateZeroAndEmpty()
+    {
+        $this->assertSame(0, TDateTime::createDate('0')->timestamp);
+        $this->assertSame(0, TDateTime::createDate(0)->timestamp);
+        $this->assertNull(TDateTime::createDate(null));
+        $this->assertNull(TDateTime::createDate(''));
+        $this->assertNull(TDateTime::createDate(false));
+    }
+
+    /**
+     * Verifica isDate com valores vazios, objetos e arrays
+     */
+    public function testIsDateEdgeCases()
+    {
+        $this->assertFalse(TDateTime::isDate(null));
+        $this->assertFalse(TDateTime::isDate(''));
+        $this->assertFalse(TDateTime::isDate(['x' => 1]));
+        $this->assertFalse(TDateTime::isDate(new stdClass()));
+        $this->assertTrue(TDateTime::isDate(new DateTime('2013-05-01')));
+        $this->assertTrue(TDateTime::isDate(new DateTimeImmutable('2013-05-01')));
+        $this->assertTrue(TDateTime::isDate(['date' => '2013-05-01']));
+    }
+
+    /**
+     * Verifica compareDate e intervalDays sem argumento (comparação com hoje)
+     */
+    public function testCompareWithToday()
+    {
+        $this->assertSame(1, (new TDateTime('+3 days'))->compareDate());
+        $this->assertSame(0, (new TDateTime('today'))->compareDate());
+        $this->assertSame(-1, (new TDateTime('-3 days'))->compareDate());
+        $this->assertSame(-3, (new TDateTime('+3 days'))->intervalDays());
+        $this->assertSame(0, (new TDateTime('today'))->intervalDays());
+        $this->assertSame(3, (new TDateTime('-3 days'))->intervalDays());
+    }
+
+    /**
+     * Verifica isFutureDayTo e isPastDayTo com data informada, ignorando as horas
+     */
+    public function testIsFutureAndPastDayToWithArgument()
+    {
+        $date = new TDateTime('2013-05-01 10:00:00');
+        $this->assertTrue($date->isFutureDayTo('2013-04-30'));
+        $this->assertFalse($date->isFutureDayTo('2013-05-02'));
+        $this->assertTrue($date->isPastDayTo('2013-05-02'));
+        $this->assertFalse($date->isPastDayTo('2013-04-30'));
+        $this->assertFalse($date->isFutureDayTo('2013-05-01 08:00:00'));
+        $this->assertFalse($date->isPastDayTo('2013-05-01 23:00:00'));
+    }
+
+    /**
+     * Verifica o overflow de mês herdado do Carbon (31/01 + 1 mês = 03/03)
+     */
+    public function testAddMonthOverflow()
+    {
+        $this->assertSame('2013-03-03', (new TDateTime('2013-01-31'))->addMonth()->toDateString());
+        $this->assertSame('2013-02-28', (new TDateTime('2013-01-31'))->addMonthsNoOverflow(1)->toDateString());
+        $this->assertSame('2013-03-01', (new TDateTime('2012-02-29'))->addYear()->toDateString());
+    }
+
+    /**
+     * Verifica o dia do ano (base 0) em anos bissextos
+     */
+    public function testGetDayOfYearLeapYear()
+    {
+        $this->assertSame(59, (new TDateTime('2013-03-01'))->getDayOfYear());
+        $this->assertSame(60, (new TDateTime('2012-03-01'))->getDayOfYear());
     }
 }
