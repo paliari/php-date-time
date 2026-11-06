@@ -1,0 +1,37 @@
+---
+description: Padrões para escrever testes PHPUnit desta biblioteca
+globs: tests/**/*.php
+alwaysApply: false
+---
+
+# Testes (PHPUnit 8)
+
+- Um arquivo por classe: `tests/<Classe>Test.php`, sem namespace,
+  `class <Classe>Test extends \PHPUnit\Framework\TestCase`.
+- `setUp(): void` e `tearDown(): void` com retorno `void` (exigido pelo PHPUnit 8).
+- Um docblock em português acima de cada teste descrevendo o que é verificado.
+- Testes com loops longos ou de varredura de datas levam `@group slow`.
+- Exceções: `$this->expectException(DomainException::class);` antes da chamada.
+
+## Datas determinísticas
+
+Preferir datas fixas (o projeto usa `2013-05-01`, `2013-10-01`...) em vez de `now`/`time()`.
+Lembrar que as instâncias são mutáveis: não reutilizar a mesma instância entre asserts
+que a modificam.
+
+```php
+/**
+ * Verifica se a funcao esta adicionando o valor passado na propriedade
+ */
+public function testAddDay()
+{
+    $date = new TDateTime('2013-05-01');
+    $this->assertEquals('2013-05-03', $date->addDay(2)->toDateString());
+}
+```
+
+## Cobertura esperada
+
+Ao criar ou alterar um método em `src/`, adicionar teste cobrindo:
+caso feliz, borda de mês/ano (ex.: 31/12 → 01/01, ano bissexto) e, quando aplicável,
+o comportamento de `TDate`/`TDateMonth` (normalização feita em `init()`).

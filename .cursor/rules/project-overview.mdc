@@ -1,0 +1,46 @@
+---
+description: Visão geral da biblioteca paliari/php-date-time, stack, comandos e fluxo de git
+alwaysApply: true
+---
+
+# paliari/php-date-time
+
+Biblioteca Composer (`type: library`, MIT) publicada no Packagist que estende o Carbon 2
+com helpers de data/hora em português. Consumida por outros projetos: **a API pública é contrato**.
+
+## Estrutura
+
+- `src/TDateTime.php` — classe base, `extends Carbon\Carbon`. Concentra toda a lógica.
+- `src/TDate.php` — zera hora/min/seg via `init()`.
+- `src/TDateMonth.php` — força dia 1 e 00:00:00 via `init()`; `__toString()` retorna `m/Y`.
+- `tests/` — PHPUnit 8, um `*Test.php` por classe.
+- Namespace PSR-4: `Paliari\DateTime\` → `src/`.
+
+## Stack e compatibilidade
+
+- `nesbot/carbon: ^2.18` e `phpunit/phpunit: ^8.1` → manter código compatível com PHP 7.2+.
+  Não usar typed properties, union types, `match`, enums, readonly, named args, nullsafe `?->`.
+- Não migrar para Carbon 3 / PHPUnit 9+ sem pedido explícito (quebra os consumidores).
+
+## Comandos
+
+```bash
+composer install
+vendor/bin/phpunit                      # suíte completa
+vendor/bin/phpunit --exclude-group slow # pula os loops de 15 anos
+docker compose -f docker-compose-cli.yml run --rm cli   # ambiente PHP 7 legado
+```
+
+Sempre rodar `vendor/bin/phpunit` após alterar `src/`.
+
+## Git e versionamento
+
+- Remote no GitHub, fluxo git-flow: `develop`, `master`, `release/x.y.z`, `hotfix/x.y.z`.
+- Tags semver **sem** prefixo `v` (ex.: `1.0.2`). A versão real vem das tags;
+  o arquivo `VERSION` está desatualizado (0.7.12) e `VERSION.orig.orig` é resto de merge.
+- Mensagens de commit no estilo conventional commits (`fix:`, `feat:`, `test:`...).
+
+## Idioma
+
+Docblocks, mensagens de exceção e descrições de teste em **português**;
+nomes de classes/métodos/variáveis em inglês (exceto os legados já existentes).

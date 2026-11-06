@@ -1,0 +1,50 @@
+---
+description: Convenções e armadilhas do código da biblioteca (TDateTime, TDate, TDateMonth)
+globs: src/**/*.php
+alwaysApply: false
+---
+
+# Código em src/
+
+## Compatibilidade da API pública
+
+- Nunca remover nem renomear métodos públicos; inclusive os legados `as_json()`, `to_json()`
+  (snake_case) e `compare()`. Para substituir, marcar com `@deprecated` apontando o novo método.
+- Não adicionar tipos de parâmetro/retorno em métodos que sobrescrevem o Carbon
+  (`setDay`, `addDay`, `toDateString`...): a assinatura precisa bater com a do pai.
+- Documentar tipos via docblock, no padrão já usado:
+
+```php
+/**
+ * Retorna o objeto adicionando a quantidade de dias passado no parâmetro
+ *
+ * @param int $value
+ *
+ * @return TDateTime
+ */
+public function addDay($value = 1)
+{
+    return $this->addDays($value);
+}
+```
+
+## Padrões do projeto
+
+- Subclasses normalizam a data sobrescrevendo `protected function init()`, chamado no fim do
+  construtor. Não sobrescrever o construtor nas subclasses.
+- Usar `static::` (não `self::`) em factories/constantes para respeitar a subclasse.
+- Entrada inválida no construtor lança `DomainException("Data $time inválida!")`;
+  `createDate()` retorna `null` para vazio (mas `'0'` é válido e vira timestamp 0).
+- `prepareDate()` é o único ponto de parsing: aceita `DateTime`, numérico (timestamp),
+  array com chave `date`, objeto com `getTimestamp()` e string aceita por `strtotime()`.
+
+## Armadilhas conhecidas
+
+- **Instâncias são mutáveis** (Carbon mutável): `addDay()`, `setHour()` etc. alteram `$this`.
+  Para não alterar o original, `clone` antes (como em `firstDayOfMonth()`).
+- Strings `xx/xx/yyyy` são lidas como americano (`m/d/Y`) pelo `strtotime`; o docblock
+  do construtor que diz o contrário está errado.
+- `intervalDays()` retorna `string` (ex.: `"30"`) apesar do docblock dizer `int`.
+- `getDayOfYear()` é base 0 (`format('z')`), apesar do docblock dizer "1 a 365".
+- `addMonth()` sofre overflow (31/01 + 1 mês = 03/03); usar `addMonthsNoOverflow()` quando preciso.
+- `compareDate()`/`intervalDays()` comparam apenas a data, em UTC, ignorando horas.
