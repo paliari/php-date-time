@@ -81,7 +81,7 @@ class TDateTime extends Carbon
     /**
      * @return string
      */
-    public function toString()
+    public function toString(): string
     {
         return $this->format(static::DATE_TIME_STR);
     }
@@ -89,7 +89,7 @@ class TDateTime extends Carbon
     /**
      * @return string
      */
-    public function toDateString()
+    public function toDateString(): string
     {
         return $this->format(static::DATE_STR);
     }
